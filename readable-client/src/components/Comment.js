@@ -3,7 +3,7 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 import SubtitleComponent from './SutitleComponent';
 import CardActions from 'material-ui/Card/CardActions';
 import VoteControl from './VoteControl';
-import EditorControl from './EditorControl';
+import ActionControl from './ActionControl';
 
 const Comment = ({ comment }) => {
     const currentDate = new Date(comment.timestamp);
@@ -18,7 +18,7 @@ const Comment = ({ comment }) => {
             </CardText>
             <CardActions>
                 <VoteControl voteScore = {comment.voteScore} />
-                <EditorControl />
+                <ActionControl content={comment}/>
             </CardActions>
         </Card>
     )

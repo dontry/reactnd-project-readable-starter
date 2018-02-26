@@ -16,7 +16,7 @@ class CategoryMenu extends Component {
         super(props);
     }
 
-    createMenu = function () {
+    createMenu =  () => {
         const categories = this.props.categories;
         return categories.map(category => <Chip style={styles.chip}>{category}</Chip>);
     }

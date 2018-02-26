@@ -7,7 +7,7 @@ import Chip from 'material-ui/Chip';
 import Comment from 'material-ui/svg-icons/communication/comment';
 import SubtitleComponent from './SutitleComponent';
 import VoteControl from './VoteControl';
-import EditorControl from './EditorControl';
+import ActionControl from './ActionControl';
 
 
 const style = {
@@ -52,7 +52,7 @@ class Post extends Component {
                 <CardActions>
                     <VoteControl isRaised voteScore = {post.voteScore} />
                     <FlatButton icon={<Comment></Comment>} label={post.commentCount} />
-                    <EditorControl  />
+                    <ActionControl  content={post}/>
                 </CardActions>
             </Card>
         );

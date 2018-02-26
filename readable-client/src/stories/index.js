@@ -9,9 +9,10 @@ import { Button, Welcome } from '@storybook/react/demo';
 import Post from '../components/Post';
 import PostList from '../components/PostList';
 import Comment from '../components/Comment';
-import EditorControl from '../components/EditorControl';
+import ActionControl from '../components/ActionControl';
 import CommentList from '../components/CommentList';
 import CategoryMenu from '../components/CategoryMenu';
+import EditorButton from '../components/EditorButton';
 
 storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
 
@@ -78,5 +79,6 @@ storiesOf('Material-UI', module)
   .add('Post', () => <Post post={posts[0]} />)
   .add('CommentList', () => <CommentList comments={comments} />)
   .add('Comment', () => <Comment comment={comments[0]} />)
+  .add('EditorButton', () => <EditorButton content={posts[0]}/>)
 
 
