@@ -11,6 +11,7 @@ import PostList from '../components/PostList';
 import Comment from '../components/Comment';
 import EditorControl from '../components/EditorControl';
 import CommentList from '../components/CommentList';
+import CategoryMenu from '../components/CategoryMenu';
 
 storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
 
@@ -68,12 +69,14 @@ parentDeleted: false},{
     parentDeleted: false
 }]
 
+const categories = ['react', 'redux', 'nodejs', 'angular', 'vue'];
+
 storiesOf('Material-UI', module)
   .addDecorator(muiTheme())
-  .add('Post', () => <Post post={posts[0]} />)
+  .add('CategoryMenu', () => <CategoryMenu categories={categories} />)
   .add('PostList', () => <PostList posts={posts} />)
-  .add('Comment', () => <Comment comment={comments[0]} />)
+  .add('Post', () => <Post post={posts[0]} />)
   .add('CommentList', () => <CommentList comments={comments} />)
-
+  .add('Comment', () => <Comment comment={comments[0]} />)
 
 
