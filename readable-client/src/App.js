@@ -4,6 +4,7 @@ import './App.css';
 import { createStore } from 'redux';
 // import reducer from './reducers';
 import { Provider } from 'react-redux';
+import Loading from 'react-loading';
 
 // const store = createStore( 
 //   reducer,
@@ -11,6 +12,11 @@ import { Provider } from 'react-redux';
 // );
 
 class App extends Component {
+  state = {
+    post: null
+  }
+
+
   render() {
     return (
       <div className="App">
