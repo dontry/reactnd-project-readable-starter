@@ -8,7 +8,6 @@ export function getCategories() {
   return ax.get(`${URL}/categories`);
 }
 
-
 export function getPosts() {
   return ax.get(`${URL}/posts`);
 }
@@ -22,19 +21,19 @@ export function getPostById(id) {
 }
 
 export function updatePostById(id, {title, body}) {
-    return ax.put(`${URL}/posts`/${id}, {title, body});
+    return ax.put(`${URL}/posts/${id}`, {title, body});
 }
 
 export function createPost(post) {
     return ax.post(`${URL}/posts`, post);
 }
 
-export function deletePost(id) {
+export function deletePostById(id) {
     return ax.delete(`${URL}/posts/${id}`);
 }
 
 export function voteForPostById(id, option) { //option: "upVote" or "downVote"
-    return ax.post(`${URL}/posts/${id}`)
+    return ax.post(`${URL}/posts/${id}`, option);
 }
 
 export function getCommentById(id) {
@@ -54,5 +53,6 @@ export function deleteCommentById(id) {
 }
 
 export function getCommentsByPostId(id) {
-    return ax.get(`${URL}/post/${id}/comments`);
+    return ax.get(`${URL}/posts/${id}/comments`);
 }
+
