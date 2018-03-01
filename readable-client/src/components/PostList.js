@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import Post from './Post';
 import Card from 'material-ui/Card';
 import { List, ListItem } from 'material-ui/List';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import MenuItem from 'material-ui/MenuItem';
-import { SortControl } from './SortControl';
+import SortControl from './SortControl';
 import Assignment from 'material-ui/svg-icons/action/assignment';
 import SubtitleComponent from './SutitleComponent';
 import FlatButton from 'material-ui/FlatButton';
@@ -64,7 +62,7 @@ class PostList extends Component {
     render() {
         // const children = this.state.posts.map((post) => <Post key={post.id} post={post} />)
         const children = this.state.posts.map((post) => (
-            <Card>
+            <Card key={post.id}>
                 <ListItem 
                 primaryText={<h4 style={{marginTop: 0}}>{post.title} <Chip style={{display: "inline"}}>{post.category}</Chip></h4>} 
                 secondaryText={<SubTitle author={post.author} timestamp={post.timestamp}/>} 

@@ -1,33 +1,36 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import { createStore } from 'redux';
+import React, { Component } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import { createStore } from "redux";
 // import reducer from './reducers';
-import { Provider } from 'react-redux';
-import Loading from 'react-loading';
-
-// const store = createStore( 
-//   reducer,
-//   window.__REDUX_DEVTOOLS_EXTENSIONS__ & window.___REDUX_DEVTOOLS_EXTENSIONS__
-// );
+import { Provider } from "react-redux";
+import Loading from "react-loading";
+import * as api from "./utils/api";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import CategoryMenu from "./components/CategoryMenu";
+import PostList from "./components/PostList";
 
 class App extends Component {
   state = {
-    post: null
+    posts: null,
+    categories: null
+  };
+
+  async componentDidMount() {
+    const categories = (await api.getCategories()).data.categories;
+    const posts = (await api.getPosts()).data;
+    this.setState({ posts, categories });
   }
 
-
   render() {
+    const { categories, posts } = this.state;
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+      <MuiThemeProvider>
+        <div className="app">
+          {categories && <CategoryMenu categories={categories} />}
+          {posts && <PostList posts={posts} />}
+        </div>
+      </MuiThemeProvider>
     );
   }
 }

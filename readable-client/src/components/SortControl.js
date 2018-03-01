@@ -4,7 +4,7 @@ import MenuItem from 'material-ui/MenuItem';
 
 
 const SortControl = ({ onChange, defaultValue, options }) => {
-    const children = options.map((option) => <MenuItem value={option.value} primaryText={option.text} />)
+    const children = options.map((option) => <MenuItem value={option.value} primaryText={option.text} key={option.value}/>)
     return (
         <DropDownMenu onChange={onChange} value={defaultValue}>
             {children}
@@ -12,4 +12,4 @@ const SortControl = ({ onChange, defaultValue, options }) => {
     )
 }
 
-export { SortControl, SORT_VOTESCORE, SORT_TIMESTAMP };
+export default SortControl; 

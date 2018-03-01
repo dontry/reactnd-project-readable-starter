@@ -12,13 +12,9 @@ const styles = {
 }
 
 class CategoryMenu extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     createMenu =  () => {
         const categories = this.props.categories;
-        return categories.map(category => <Chip style={styles.chip}>{category}</Chip>);
+        return categories.map(category => <Chip style={styles.chip} key={category.name}>{category.name}</Chip>);
     }
 
     render() {
