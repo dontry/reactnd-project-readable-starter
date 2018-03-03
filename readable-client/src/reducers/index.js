@@ -24,7 +24,7 @@ function addPosts(newPosts = [], oldPosts) {
 }
 
 
-function posts(state={}, action) {
+const posts = (state={}, action) => {
     switch (action.type) {
         case ADD_POSTS: 
             state = [...state, ...action.posts]

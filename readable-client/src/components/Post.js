@@ -9,9 +9,9 @@ import SubtitleComponent from './SutitleComponent';
 import VoteControl from './VoteControl';
 import ActionControl from './ActionControl';
 
-
 const style = {
-    marginBottom: 10
+    marginBottom: 10,
+    textDecoration: "none"
 }
 const Title = ({title}) => {
     return <h2>{title}</h2>
@@ -36,7 +36,8 @@ class Post extends Component {
     constructor(props) {
         super(props);
     }
-    render() {
+    
+   render() {
         const { post } = this.props;
         return (
             <Card style={style}>

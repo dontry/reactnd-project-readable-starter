@@ -8,6 +8,7 @@ import SubtitleComponent from "./SutitleComponent";
 import FlatButton from "material-ui/FlatButton";
 import Chip from "material-ui/Chip";
 import * as api from "../utils/api";
+import { Route, Link } from "react-router-dom";
 
 const SORT_VOTESCORE = 1;
 const SORT_TIMESTAMP = 2;
@@ -48,25 +49,13 @@ class PostList extends Component {
 
   async componentDidMount() {
     let posts = [];
-    const category = this.props.match.params.category || '';
-    if (category !== '') {
+    const category = this.props.match.params.category || "";
+    if (category !== "") {
       posts = (await api.getPostByCategory(category)).data;
     } else {
       posts = (await api.getPosts()).data;
     }
-    this.setState({posts, category})
-  }
-
-
-  async componentWillUpdate() {
-    let posts = [];
-    const category = this.props.match.params.category || '';
-    if (category !== '') {
-      posts = (await api.getPostByCategory(category)).data;
-    } else {
-      posts = (await api.getPosts()).data;
-    }
-    this.setState({posts, category})
+    this.setState({ posts, category });
   }
 
   handleChange = (evet, index, value) => {
@@ -88,33 +77,61 @@ class PostList extends Component {
     });
   };
 
+  createPostLinks = () => {
+    return this.state.posts.map(post => (
+      <Link to={`/${post.category}/${post.id}`} key={post.id}>
+        <Card>
+          <ListItem
+            primaryText={
+              <h4 style={{ marginTop: 0 }}>
+                {post.title}
+                <Chip style={{ display: "inline" }}>{post.category}</Chip>
+              </h4>
+            }
+            secondaryText={
+              <SubTitle author={post.author} timestamp={post.timestamp} />
+            }
+            leftIcon={<Assignment />}
+            rightIcon={<FlatButton>▲{post.voteScore}</FlatButton>}
+          />
+        </Card>
+      </Link>
+    ));
+  };
+
+  createPostRoutes = () => {
+    return this.state.posts.map(post => (
+      <Route
+        path={`/${post.category}/${post.id}`}
+        key={post.id}
+        render={() => <Post post={post} />}
+      />
+    ));
+  };
+
   render() {
     // const children = this.state.posts.map((post) => <Post key={post.id} post={post} />)
-    const children = this.state.posts.map(post => (
-      <Card key={post.id}>
-        <ListItem
-          primaryText={
-            <h4 style={{ marginTop: 0 }}>
-              {post.title}{" "}
-              <Chip style={{ display: "inline" }}>{post.category}</Chip>
-            </h4>
-          }
-          secondaryText={
-            <SubTitle author={post.author} timestamp={post.timestamp} />
-          }
-          leftIcon={<Assignment />}
-          rightIcon={<FlatButton>▲{post.voteScore}</FlatButton>}
-        />
-      </Card>
-    ));
+    const { category } = this.state;
+    const PostLinks = this.createPostLinks();
+    const PostRoutes = this.createPostRoutes();
     return (
       <div>
-        <SortControl
-          onChange={this.handleChange}
-          defaultValue={this.state.selectedOption}
-          options={sortOptions}
+        <Route
+          exact
+          path={`/${category}`}
+          render={() => (
+            <div>
+              <h1>{category}</h1>
+              <SortControl
+                onChange={this.handleChange}
+                defaultValue={this.state.selectedOption}
+                options={sortOptions}
+              />
+              <List>{PostLinks}</List>
+            </div>
+          )}
         />
-        <List>{children}</List>
+        {PostRoutes}
       </div>
     );
   }
