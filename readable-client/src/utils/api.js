@@ -13,6 +13,7 @@ export function getPosts() {
 }
 
 export function getPostByCategory(category = "") {
+  if(category === "") return null;
   return ax.get(`${URL}/${category}/posts`);
 }
 

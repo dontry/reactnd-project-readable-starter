@@ -1,10 +1,10 @@
 import {
-    CREATE_POST,
+    ADD_POSTS,
     UPDATE_POST,
     UPVOTE_POST,
     DOWNVOTE_POST,
     DELETE_POST,
-    CREATE_COMMENT,
+    ADD_COMMENTS,
     UPDATE_COMMENT,
     DELETE_COMMENT 
 } from '../actions'
@@ -13,10 +13,22 @@ import {
     combineReducers
 } from 'redux';
 
+
+function addPosts(newPosts = [], oldPosts) {
+    const posts = {
+        ...newPosts,
+        oldPosts
+    }
+
+    return posts;
+}
+
+
 function posts(state={}, action) {
     switch (action.type) {
-        case CREATE_POST: 
-            break;
+        case ADD_POSTS: 
+            state = [...state, ...action.posts]
+            return state;
         case UPDATE_POST:
         break;
         case DELETE_POST:
@@ -26,7 +38,7 @@ function posts(state={}, action) {
         case DOWNVOTE_POST:
         break;
         default:
-            break;
+        return state;
     }
 }
 
