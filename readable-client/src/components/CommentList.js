@@ -3,7 +3,7 @@ import Comment from './Comment';
 import List from 'material-ui/List';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
-import { SortControl } from './SortControl';
+import  SortControl  from './SortControl';
 
 const SORT_VOTESCORE = 1;
 const SORT_TIMESTAMP = 2;

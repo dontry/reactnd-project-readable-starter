@@ -1,8 +1,7 @@
-* {
+.App a {
+  all: unset;
   text-decoration: none;
-}
-.App {
-  text-align: center;
+  cursor: pointer;
 }
 
 .App-logo {

@@ -13,6 +13,17 @@ import { Route, Link } from "react-router-dom";
 const SORT_VOTESCORE = 1;
 const SORT_TIMESTAMP = 2;
 
+const styles = {
+  heading: {
+    padding: "0 20px"
+  },
+  chip: {
+    display: "inline-block",
+    marginLeft: 10,
+    backgroundColor: "#47d8ea"
+  }
+}
+
 const SubTitle = ({ author, timestamp }) => {
   const currentDate = new Date(timestamp);
   return (
@@ -85,7 +96,7 @@ class PostList extends Component {
             primaryText={
               <h4 style={{ marginTop: 0 }}>
                 {post.title}
-                <Chip style={{ display: "inline" }}>{post.category}</Chip>
+                <Chip style={styles.chip}>{post.category}</Chip>
               </h4>
             }
             secondaryText={
@@ -121,7 +132,7 @@ class PostList extends Component {
           path={`/${category}`}
           render={() => (
             <div>
-              <h1>{category}</h1>
+              <h1 style={styles.heading}>{category}</h1>
               <SortControl
                 onChange={this.handleChange}
                 defaultValue={this.state.selectedOption}
