@@ -14,6 +14,17 @@ const defaultData = {
     deleted: false,
     commentCount: 2
   },
+  "8xf0y6ziydxywermBzx123": {
+    id: '8xf0y6ziydxywermBzx123',
+    timestamp: 1467166872634,
+    title: 'React Lifecyle',
+    body: 'React has several lifecycle',
+    author: 'thingtwo',
+    category: 'react',
+    voteScore: 10,
+    deleted: false,
+    commentCount: 0 
+  },
   "6ni6ok3ym7mf1p33lnez": {
     id: '6ni6ok3ym7mf1p33lnez',
     timestamp: 1468479767190,
@@ -22,6 +33,17 @@ const defaultData = {
     author: 'thingone',
     category: 'redux',
     voteScore: -5,
+    deleted: false,
+    commentCount: 0
+  },
+  "6ni6ok3ym7mf1p33asdfa": {
+    id: '6ni6ok3ym7mf1p33asdfa',
+    timestamp: 1468479000000,
+    title: 'Learn Node in 10 hours!',
+    body: 'Just kidding. It takes more than 10 hours to learn technology.',
+    author: 'thingone',
+    category: 'node',
+    voteScore: 10,
     deleted: false,
     commentCount: 0
   }

@@ -3,7 +3,7 @@ import Comment from './Comment';
 import List from 'material-ui/List';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
-import  SortControl  from './SortControl';
+import  SortButtonGroup  from './SortButtonGroup';
 
 const SORT_VOTESCORE = 1;
 const SORT_TIMESTAMP = 2;
@@ -55,7 +55,7 @@ class CommentList extends Component {
         const children = this.state.comments.map((comment) => <Comment key={comment.id} comment={comment} />)
         return (
             <div>
-                <SortControl onChange={this.handleChange} defaultValue={this.state.selectedOption} options={sortOptions} />
+                <SortButtonGroup onChange={this.handleChange} defaultValue={this.state.selectedOption} options={sortOptions} />
                 <List>{children}</List>
             </div>
         )

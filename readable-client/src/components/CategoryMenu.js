@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Route, Link } from "react-router-dom";
 import Chip from "material-ui/Chip";
+import DropdownMenu from "material-ui/DropDownMenu";
+import MenuItem from "material-ui/MenuItem";
 
 const styles = {
   chip: {
@@ -16,20 +18,20 @@ const styles = {
   }
 };
 class CategoryMenu extends Component {
-  openCategory = (history, path) => {
-    history.push(`/${path}`);
-  };
-  createMenu = () => {
-    const categories = this.props.categories;
+  componentDidMount() {
+    this.props.fetchCategories && this.props.fetchCategories();
+  }
+  createChipMenuItems = categories => {
     return categories.map(category => (
-      <Chip style={styles.chip} key={category.name}>
-        <Link to={`/${category.name}`} style={styles.link}>{category.name}</Link>
-      </Chip>
+      <Link to={`/${category}`} style={styles.link}>
+        <Chip style={styles.chip} key={category.name} label={category.name} />
+      </Link>
     ));
   };
 
   render() {
-    const children = this.createMenu();
+    const { categories } = this.props;
+    const children = this.createChipMenuItems(categories);
     return <div style={styles.wrapper}>{children}</div>;
   }
 }

@@ -22,13 +22,15 @@ const DownvoteButton = ({ isRaised }) => {
         )
 }
 
-const VoteControl = ({isRaised = false, voteScore}) => {
+const VoteButtonGroup = ({isRaised = false, voteScore, handleVote}) => {
+    const upVote = handleVote('upVote');
+    const downVote = handleVote('downVote');
     return (
         <span>
-            <UpvoteButton isRaised={isRaised} voteScore={voteScore} />
-            <DownvoteButton isRaised={isRaised} />
+            <UpvoteButton isRaised={isRaised} voteScore={voteScore} onClick={upVote} />
+            <DownvoteButton isRaised={isRaised} onClick={downVote} />
         </span>
     )
 }
 
-export default VoteControl; 
+export default VoteButtonGroup; 

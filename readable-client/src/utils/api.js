@@ -1,59 +1,59 @@
 import axios from 'axios';
 
 const HEADERS = { headers: { 'Authorization': "udacity" } };
-const URL = "http://localhost:3001";
+const ROOT_URL = "http://localhost:3001";
 const ax = axios.create(HEADERS)
 
 export function getCategories() {
-  return ax.get(`${URL}/categories`);
+  return ax.get(`${ROOT_URL}/categories`);
 }
 
 export function getPosts() {
-  return ax.get(`${URL}/posts`);
+  return ax.get(`${ROOT_URL}/posts`);
 }
 
-export function getPostByCategory(category = "") {
+export function getPostsByCategory(category = "") {
   if(category === "") return null;
-  return ax.get(`${URL}/${category}/posts`);
+  return ax.get(`${ROOT_URL}/${category}/posts`);
 }
 
 export function getPostById(id) {
-    return ax.get(`${URL}/posts/${id}`);
+    return ax.get(`${ROOT_URL}/posts/${encodeURIComponent(id)}`);
 }
 
 export function updatePostById(id, {title, body}) {
-    return ax.put(`${URL}/posts/${id}`, {title, body});
+    return ax.put(`${ROOT_URL}/posts/${encodeURIComponent(id)}`, {title, body});
 }
 
 export function createPost(post) {
-    return ax.post(`${URL}/posts`, post);
+    return ax.post(`${ROOT_URL}/posts`, post);
 }
 
 export function deletePostById(id) {
-    return ax.delete(`${URL}/posts/${id}`);
+    return ax.delete(`${ROOT_URL}/posts/${encodeURIComponent(id)}`);
 }
 
 export function voteForPostById(id, option) { //option: "upVote" or "downVote"
-    return ax.post(`${URL}/posts/${id}`, option);
+    return ax.post(`${ROOT_URL}/posts/${encodeURIComponent(id)}`, option);
 }
 
 export function getCommentById(id) {
-    return ax.get(`${URL}/comments/${id}`);
+    return ax.get(`${ROOT_URL}/comments/${encodeURIComponent(id)}`);
 }
 
 export function createComment(comment) {
-    return ax.post(`${URL}/comments`, comment);
+    return ax.post(`${ROOT_URL}/comments`, comment);
 }
 
 export function updateCommentById(id, {timestamp, body}) {
-    return ax.put(`${URL}/comments/${id}`, {timestamp, body});
+    return ax.put(`${ROOT_URL}/comments/${encodeURIComponent(id)}`, {timestamp, body});
 }
 
 export function deleteCommentById(id) {
-    return ax.delete(`${URL}/comments/${id}`);
+    return ax.delete(`${ROOT_URL}/comments/${encodeURIComponent(id)}`);
 }
 
 export function getCommentsByPostId(id) {
-    return ax.get(`${URL}/posts/${id}/comments`);
+    return ax.get(`${ROOT_URL}/posts/${encodeURIComponent(id)}/comments`);
 }
 

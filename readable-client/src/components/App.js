@@ -10,7 +10,9 @@ import PostList from "./components/PostList";
 import Post from "./components/Post";
 import Error404 from "./components/Error404";
 import * as api from "./utils/api";
-import './App.css';
+import "./App.css";
+import IconButton from "material-ui/IconButton";
+import NoteAdd from "material-ui-icons/NoteAdd";
 
 const Container = categories => routeProps => (
   <div>
@@ -18,6 +20,25 @@ const Container = categories => routeProps => (
     <PostList {...routeProps} />
   </div>
 );
+
+const Navigation = () => (
+  <AppBar
+    title={<NavLink to="/">Blog</NavLink>}
+    iconElementRight={<CreatePostButton />}
+  />
+);
+
+class CreatePostButton extends Component {
+  render() {
+    return (
+      <div>
+      <IconButton tooltip="Create a new blog">
+        <NoteAdd />
+      </IconButton>
+      </div>
+    )
+  }
+}
 
 class App extends Component {
   state = {
@@ -41,7 +62,7 @@ class App extends Component {
     return (
       <MuiThemeProvider>
         <div className="App">
-          <AppBar title={<NavLink to="/">Forum</NavLink>} />
+          <Navigation />
           <Switch>
             <Route exact path="/" render={Container(categories)} />
             {CategoryRoutes}

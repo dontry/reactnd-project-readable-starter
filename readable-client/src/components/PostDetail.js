@@ -12,10 +12,9 @@ import FontIcon from "material-ui/FontIcon";
 import Chip from "material-ui/Chip";
 import Comment from "material-ui/svg-icons/communication/comment";
 import SubtitleComponent from "./SutitleComponent";
-import VoteControl from "./VoteControl";
+import VoteButtonGroup from "./VoteButtonGroup";
 import ActionControl from "./ActionControl";
-import CommentList from "./CommentList";
-import * as api from "../utils/api";
+import { Link } from "react-router-dom";
 
 const styles = {
   card: {
@@ -26,6 +25,13 @@ const styles = {
     display: "inline-block",
     marginLeft: 10,
     backgroundColor: "#47d8ea"
+  },
+  wrapper: {
+    float: "right"
+  },
+  button: {
+    marginLeft: 5,
+    marginRight: 5
   }
 };
 const Title = ({ title }) => {
@@ -45,24 +51,46 @@ const Subtitle = ({ author, timestamp, category }) => {
   );
 };
 
-class Post extends Component {
+const Body = ({ body }) => <CardText expandable={true}>{body}</CardText>;
+
+const ButtonGroup = handleDelete => (
+  <span style={styles.wrapper}>
+    <Link to="posts/edit">
+      <RaisedButton style={styles.button} label="Edit" primary={true} />
+    </Link>
+    <FlatButton style={styles.button} label="Delete" onClick={handleDelete} />
+  </span>
+);
+
+class PostDetail extends Component {
   state = {
-    post: this.props.post,
     comments: [],
     isCommentListOpen: false
   };
 
-  async componentDidMount() {
-    const { post } = this.state;
-    const comments = (await api.getCommentsByPostId(post.id)).data;
-    this.setState({ comments });
+  componentWillMount() {
+    this.props.reset && this.props.reset();
   }
+
+  componentDidMount() {
+    this.props.fetchPost && this.props.fetchPost(this.props.postId);
+  }
+
+  handleDelete = () => {
+    this.props.deletePost(this.props.post.id);
+    //TODO go back?
+  };
+
+  handleVote = option => () => {
+    this.props.votePost && this.props.votePost(this.props.postId, option);
+  };
 
   toggleCommentList = () => {
     this.setState({ isCommentListOpen: !this.state.isCommentListOpen });
   };
   render() {
-    const { comments, post, isCommentListOpen } = this.state;
+    const { post } = this.props;
+    const { comments, isCommentListOpen } = this.state;
     return (
       <div>
         <Card style={styles.card}>
@@ -78,25 +106,24 @@ class Post extends Component {
             actAsExpander={true}
             showExpandableButton={true}
           />
-          <CardText expandable={true}>{post.body}</CardText>
+          <Body body={post.body}/>
           <CardActions>
-            <VoteControl isRaised voteScore={post.voteScore} />
+            <VoteButtonGroup
+              isRaised
+              voteScore={post.voteScore}
+              handleVote={this.handleVote}
+            />
             <FlatButton
               icon={<Comment />}
               onClick={this.toggleCommentList}
-              label={post.commentCount > 0 ? post.commentCount : "0"}
+              label={post.commentCount.toString()}
             />
-            <ActionControl content={post} />
+            <ButtonGroup handleDelete={this.handleDelete} />
           </CardActions>
         </Card>
-        {isCommentListOpen && (
-          <Card>
-            <CommentList comments={comments} />
-          </Card>
-        )}
       </div>
     );
   }
 }
 
-export default Post;
+export default PostDetail;
