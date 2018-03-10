@@ -5,14 +5,14 @@ import NavHeader from "../components/NavHeader";
 
 class PostEditor extends Component {
   render() {
-    const name = this.props.match.params.name
-      ? this.props.match.params.name
-      : "New Post";
+    const id = this.props.match.params.id;
     return (
       <div>
-        <NavHeader name={name} />
-        {name === "New Post" ? <PostCreateContainer /> : <PostEditContainer />}
+        <NavHeader name="Post Editor" />
+        {id ? <PostCreateContainer /> : <PostEditContainer />}
       </div>
     );
   }
 }
+
+export default PostEditor;

@@ -1,19 +1,17 @@
 import React from "react";
 import AppBar from "material-ui/AppBar";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import IconButton from "material-ui/IconButton";
 import NoteAdd from "material-ui-icons/NoteAdd";
 import Book from "material-ui-icons/Book";
 
 const HomeButton = () => {
   return (
-    <div>
-      <NavLink to="/">
-        <IconButton tooltip="Home">
-          <Book />
-        </IconButton>
-      </NavLink>
-    </div>
+    <Link to="/" key="home">
+      <IconButton tooltip="Home">
+        <Book />
+      </IconButton>
+    </Link>
   );
 };
 
@@ -29,11 +27,10 @@ const CreatePostButton = () => {
   );
 };
 
-const NavHeader = name => {
+const NavHeader = ({name}) => {
   return (
     <AppBar
-      title={<NavLink to={`/${name.toLowerCase()}`}>{name}</NavLink>}
-      iconElementLeft={<HomeButton />}
+      title={`${name}`}
       iconElementRight={<CreatePostButton />}
     />
   );

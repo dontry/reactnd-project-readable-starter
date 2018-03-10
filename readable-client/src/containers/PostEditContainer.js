@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import {
-    createPost,
-    createPostSuccess,
-    createPostFailure
+    addPost,
+    addPostSuccess,
+    addPostFailure
 } from '../actions/posts'
 import PostForm from '../components/PostForm';
 
@@ -15,11 +15,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        createPost: () => {
-            dispatch(createPost(post)).then(res => {
+        createPost: (post) => {
+            dispatch(addPost(post)).then(res => {
                 !res.error
-                ? dispatch(createPostSuccess(res.data))
-                : dispatch(createPostFailure(res.error));
+                ? dispatch(addPostSuccess(res.data))
+                : dispatch(addPostFailure(res.error));
             })
         }        
     }

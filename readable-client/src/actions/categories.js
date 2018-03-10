@@ -12,14 +12,14 @@ export function fetchCategories() {
     }
 }
 
-export function fetchCategoriesSuccess() {
+export function fetchCategoriesSuccess(categories) {
     return {
         type: FETCH_CATEGORIES_SUCCESS,
         payload: categories
     };
 }
 
-export function fetchCategoriesFailure() {
+export function fetchCategoriesFailure(error) {
     return {
         type: FETCH_CATEGORIES_FAILURE,
         payload: error

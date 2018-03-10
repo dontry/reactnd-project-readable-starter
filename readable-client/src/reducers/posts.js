@@ -14,6 +14,7 @@ import {
   UPDATE_POST,
   UPDATE_POST_FAILURE,
   UPDATE_POST_SUCCESS,
+  RESET_NEW_POST,
   DELETE_POST,
   DELETE_POST_FAILURE,
   DELETE_POST_SUCCESS,
@@ -104,7 +105,7 @@ export default function(state = INITIAL_STATE, action) {
     case RESET_DELETED_POST:
       return {
         ...state,
-        deletedPost: { post: null, error: null, loading: fale }
+        deletedPost: { post: null, error: null, loading: false }
       };
     default:
       return state;

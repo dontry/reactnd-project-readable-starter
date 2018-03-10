@@ -91,7 +91,7 @@ export function fetchPostSuccess(post) {
 
 export function fetchPostFailure(error) {
     return {
-        type: FETCH_POST_ERROR,
+        type: FETCH_POST_FAILURE,
         payload: error
     }
 }
@@ -170,7 +170,7 @@ export function deletePostSuccess(post) {
 
 export function deletePostFailure(error) {
     return {
-        type: DELETE_POST_ERROR,
+        type: DELETE_POST_FAILURE,
         payload: error 
     }
 }

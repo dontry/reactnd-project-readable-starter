@@ -42,9 +42,8 @@ class PostsList extends Component {
   }
 
   componentDidMount() {
-    let posts = [];
-    const category = this.props.match.params.category || "";
-    if (category !== "") {
+    const category = !!this.props.match ? this.props.match.params.category : "";
+    if (category === "") {
       this.props.fetchPosts && this.props.fetchPosts();
     } else {
       this.props.fetchPostsByCategory && this.props.fetchPostsByCategory();
@@ -65,7 +64,7 @@ class PostsList extends Component {
   };
 
   render() {
-    const { posts } = this.props;
+    const posts = this.props.posts ? this.props.posts : [];
     const { selectedOption } = this.state;
     const PostItems = this.createPostItems(posts);
     return (

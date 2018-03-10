@@ -1,17 +1,18 @@
 import React, { Component } from "react";
+import {connect} from "react-redux";
 import {
   resetNewPost,
-  createPost,
-  createPostSuccess,
-  createPostFailure
+  addPost,
+  addPostSuccess,
+  addPostFailure
 } from "../actions/posts";
 import PostForm from "../components/PostForm";
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     post: state.posts.newPost
-  }
-}
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -19,10 +20,10 @@ const mapDispatchToProps = dispatch => {
       dispatch(resetNewPost());
     },
     onCreate: post => {
-      dispatch(api.createPost(post)).then(res => {
+      dispatch(addPost(post)).then(res => {
         !res.error
-          ? dispatch(createPostSuccess(res.data))
-          : dispatch(createPostFailure(res.error));
+          ? dispatch(addPostSuccess(res.data))
+          : dispatch(addPostFailure(res.error));
       });
     }
   };

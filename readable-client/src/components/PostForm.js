@@ -1,19 +1,27 @@
 import React, { Component } from "react";
+import Card from "material-ui/Card";
 import TextField from "material-ui/TextField/TextField";
 import CategoryDropdownMenu from "./CategoryDropdownMenu";
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
-import { withRouter } from 'react-router-dom';
+import RaisedButton from "material-ui/RaisedButton";
+import FlatButton from "material-ui/FlatButton";
+import { withRouter } from "react-router-dom";
 import uniqid from "uniqid";
 
 const styles = {
+  card: {
+    padding: "20px 20px"
+  },
   actionButton: {
     marginLeft: 5,
     marginRight: 5
   },
   titleField: {
     fontWeight: "bold",
-    marginBottom: 10
+    marginBottom: 10,
+    display: "block"
+  },
+  dropdownMenu: {
+    display: "block"
   }
 };
 
@@ -29,14 +37,14 @@ const INTIAL_NEW_POST = {
   commentCount: 0
 };
 
-const ButtonGroup = (handleSubmit, handleCancel) => (
+const ButtonGroup = ({ handleSubmit, handleCancel }) => (
   <div>
     <RaisedButton
       label="Submit"
       primary={true}
       onClick={handleSubmit}
       style={styles.actionButton}
-    />,
+    />
     <FlatButton
       label="Cancel"
       secondary={true}
@@ -51,7 +59,7 @@ class PostForm extends Component {
     post: !!this.props.post ? this.props.post : INTIAL_NEW_POST
   };
   componentWillMount() {
-    this.props.reset();
+    this.props.reset && this.props.reset();
   }
   handleChangeField = fieldName => event => {
     this.setState({
@@ -63,17 +71,22 @@ class PostForm extends Component {
       post: { ...this.state.post, category: value }
     });
   };
+  handleSubmit = () => {
+    const newPost = { ...this.state.post, timestamp: Date.now() };
+    this.props.addPost(newPost);
+  };
   handleCancel = () => {
     //TODO
     this.props.history.goback();
-  }
+  };
   render() {
-    const { post } = this.state;
-    const { categories, createPost } = this.props;
+    const { post, categories } = this.state;
     return (
-      <div>
+      <Card style={styles.card}>
         <TextField
-          style={style.titleField}
+          name="title"
+          floatingLabelText="Title"
+          style={styles.titleField}
           value={post.title}
           onChange={this.handleChangeTitle}
         />
@@ -82,11 +95,15 @@ class PostForm extends Component {
           categories={categories}
           handleChange={this.handleChangeField("title")}
         />
+        <br/>
         <TextField
+          name="author"
+          floatingLabelText="Author"
           value={post.author}
           onChange={this.handleChangeField("author")}
         />
         <TextField
+          name="body"
           floatingLabelText="Body"
           multiLine={!!post.title}
           fullWidth={true}
@@ -94,8 +111,11 @@ class PostForm extends Component {
           value={post.body}
           onChange={this.handleChangeField("body")}
         />
-        <ButtonGroup handleSubmit={createPost} handleCancel={this.handleCancel} />
-      </div>
+        <ButtonGroup
+          handleSubmit={this.handleSubmit}
+          handleCancel={this.handleCancel}
+        />
+      </Card>
     );
   }
 }
