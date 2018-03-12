@@ -25,7 +25,7 @@ const styles = {
   }
 };
 
-const INTIAL_NEW_POST = {
+const InitNewPost = () => ({
   id: uniqid(),
   timestamp: null,
   title: "",
@@ -35,7 +35,7 @@ const INTIAL_NEW_POST = {
   voteScore: 0,
   deleted: false,
   commentCount: 0
-};
+});
 
 const ButtonGroup = ({ handleSubmit, handleCancel }) => (
   <div>
@@ -55,8 +55,11 @@ const ButtonGroup = ({ handleSubmit, handleCancel }) => (
 );
 
 class PostForm extends Component {
+  static contextTypes = {
+    router: () => true //context
+  };
   state = {
-    post: !!this.props.post ? this.props.post : INTIAL_NEW_POST
+    post: !!this.props.post ? this.props.post : InitNewPost()
   };
   componentWillMount() {
     this.props.reset && this.props.reset();
@@ -72,15 +75,22 @@ class PostForm extends Component {
     });
   };
   handleSubmit = () => {
-    const newPost = { ...this.state.post, timestamp: Date.now() };
-    this.props.addPost(newPost);
+    if (this.props.addPost) {
+      const newPost = { ...this.state.post, timestamp: Date.now() };
+      this.props.addPost(newPost);
+    } else if (this.props.updatePost) {
+      const updatedPost = { ...this.state.post, timestamp: Date.now() };
+      this.props.updatePost(updatedPost.id, updatedPost);
+    }
+    this.context.router.history.goBack();
   };
   handleCancel = () => {
     //TODO
-    this.props.history.goback();
+    this.context.router.history.goBack();
   };
   render() {
-    const { post, categories } = this.state;
+    const { post } = this.state;
+    const categories = this.props.categories.map(category => category.name);
     return (
       <Card style={styles.card}>
         <TextField
@@ -88,19 +98,19 @@ class PostForm extends Component {
           floatingLabelText="Title"
           style={styles.titleField}
           value={post.title}
-          onChange={this.handleChangeTitle}
+          onChange={this.handleChangeField("title").bind(this)}
         />
         <CategoryDropdownMenu
           selected={post.category}
           categories={categories}
-          handleChange={this.handleChangeField("title")}
+          handleChange={this.handleChangeCategory.bind(this)}
         />
-        <br/>
+        <br />
         <TextField
           name="author"
           floatingLabelText="Author"
           value={post.author}
-          onChange={this.handleChangeField("author")}
+          onChange={this.handleChangeField("author").bind(this)}
         />
         <TextField
           name="body"
@@ -109,11 +119,11 @@ class PostForm extends Component {
           fullWidth={true}
           rows={3}
           value={post.body}
-          onChange={this.handleChangeField("body")}
+          onChange={this.handleChangeField("body").bind(this)}
         />
         <ButtonGroup
-          handleSubmit={this.handleSubmit}
-          handleCancel={this.handleCancel}
+          handleSubmit={this.handleSubmit.bind(this)}
+          handleCancel={this.handleCancel.bind(this)}
         />
       </Card>
     );

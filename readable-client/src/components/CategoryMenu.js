@@ -23,16 +23,23 @@ class CategoryMenu extends Component {
   }
   createChipMenuItems = categories => {
     return categories.map(category => (
-      <Link to={`/${category}`} style={styles.link}>
-        <Chip style={styles.chip} key={category.name} label={category.name} />
-      </Link>
+      <Chip key={category.name} style={styles.chip} label={category.name}>
+        <Link to={`/categories/${category.path}`} style={styles.link}>
+          {category.name}
+        </Link>
+      </Chip>
     ));
   };
 
   render() {
     const { categories } = this.props;
+    if (!categories) return <div />;
     const children = this.createChipMenuItems(categories);
-    return <div style={styles.wrapper}>{children}</div>;
+    return (
+      <div style={styles.wrapper}>
+        {children}
+      </div>
+    );
   }
 }
 

@@ -1,20 +1,13 @@
 import React, { Component } from "react";
-import {
-  Card,
-  CardActions,
-  CardHeader,
-  CardTitle,
-  CardText
-} from "material-ui/Card";
+import { Card, CardActions, CardHeader, CardText } from "material-ui/Card";
 import FlatButton from "material-ui/FlatButton";
 import RaisedButton from "material-ui/RaisedButton";
-import FontIcon from "material-ui/FontIcon";
 import Chip from "material-ui/Chip";
 import Comment from "material-ui/svg-icons/communication/comment";
 import SubtitleComponent from "./SutitleComponent";
 import VoteButtonGroup from "./VoteButtonGroup";
-import ActionControl from "./ActionControl";
 import { Link } from "react-router-dom";
+import { grey400 } from "material-ui/styles/colors";
 
 const styles = {
   card: {
@@ -53,9 +46,9 @@ const Subtitle = ({ author, timestamp, category }) => {
 
 const Body = ({ body }) => <CardText expandable={true}>{body}</CardText>;
 
-const ButtonGroup = handleDelete => (
+const ButtonGroup = ({ id, handleDelete }) => (
   <span style={styles.wrapper}>
-    <Link to="posts/edit">
+    <Link to={`/posts/${encodeURIComponent(id)}/edit`}>
       <RaisedButton style={styles.button} label="Edit" primary={true} />
     </Link>
     <FlatButton style={styles.button} label="Delete" onClick={handleDelete} />
@@ -63,6 +56,9 @@ const ButtonGroup = handleDelete => (
 );
 
 class PostDetail extends Component {
+  static contextTypes = {
+    router: () => true //context
+  };
   state = {
     comments: [],
     isCommentListOpen: false
@@ -77,12 +73,15 @@ class PostDetail extends Component {
   }
 
   handleDelete = () => {
-    this.props.deletePost(this.props.post.id);
-    //TODO go back?
+    this.props.deletePost(this.props.postId);
+    this.context.router.history.goBack();
   };
 
-  handleVote = option => () => {
-    this.props.votePost && this.props.votePost(this.props.postId, option);
+  handleVote = function(option) {
+    const _this = this;
+    return function() {
+      _this.props.votePost && _this.props.votePost(_this.props.postId, option);
+    };
   };
 
   toggleCommentList = () => {
@@ -90,6 +89,7 @@ class PostDetail extends Component {
   };
   render() {
     const { post } = this.props;
+    if (!post) return <div />;
     const { comments, isCommentListOpen } = this.state;
     return (
       <div>
@@ -106,19 +106,22 @@ class PostDetail extends Component {
             actAsExpander={true}
             showExpandableButton={true}
           />
-          <Body body={post.body}/>
+          <Body body={post.body} />
           <CardActions>
             <VoteButtonGroup
               isRaised
               voteScore={post.voteScore}
-              handleVote={this.handleVote}
+              handleVote={this.handleVote.bind(this)}
             />
             <FlatButton
-              icon={<Comment />}
+              icon={<Comment color={grey400} />}
               onClick={this.toggleCommentList}
-              label={post.commentCount.toString()}
+              label={!!post.commentCount ? post.commentCount : 0}
             />
-            <ButtonGroup handleDelete={this.handleDelete} />
+            <ButtonGroup
+              id={post.id}
+              handleDelete={this.handleDelete.bind(this)}
+            />
           </CardActions>
         </Card>
       </div>

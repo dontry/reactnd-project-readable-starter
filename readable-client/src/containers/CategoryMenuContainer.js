@@ -1,26 +1,20 @@
 import React, { Commponent } from "react";
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
-  fetchCategories,
-  fetchCategoriesSuccess,
-  fetchCategoriesFailure
+  fetchCategories
 } from "../actions/categories";
 import CategoryMenu from "../components/CategoryMenu";
 
 const mapStateToProps = state => {
   return {
-    categories: state.categories
-  };
+    categories: state.categories.categoriesList.categories
+  }
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     fetchCategories: () => {
-      dispatch(fetchCategories()).then(res => {
-        return !res.error
-          ? dispatch(fetchCategoriesSuccess(res.data))
-          : dispatch(fetchCategoriesFailure(res.error));
-      });
+      dispatch(fetchCategories());
     }
   };
 };

@@ -1,13 +1,7 @@
 import React, { Component } from "react";
 import PostItem from "./PostItem";
-import Card from "material-ui/Card";
-import { List, ListItem } from "material-ui/List";
+import { List } from "material-ui/List";
 import SortButtonGroup from "./SortButtonGroup";
-import Assignment from "material-ui/svg-icons/action/assignment";
-import FlatButton from "material-ui/FlatButton";
-import Chip from "material-ui/Chip";
-import * as api from "../utils/api";
-import { Route, Link } from "react-router-dom";
 
 const SORT_VOTESCORE = 1;
 const SORT_TIMESTAMP = 2;
@@ -60,11 +54,11 @@ class PostsList extends Component {
     const { selectedOption } = this.state;
     const sortMethod =
       selectedOption === SORT_VOTESCORE ? sortVotescore : sortTimestamp;
-    return posts.sort(sortMethod).map(post => <PostItem post={post} />);
+    return posts.sort(sortMethod).map(post => <PostItem key={post.id} post={post} />);
   };
 
   render() {
-    const posts = this.props.posts ? this.props.posts : [];
+    const posts = !!this.props.posts ? this.props.posts : [];
     const { selectedOption } = this.state;
     const PostItems = this.createPostItems(posts);
     return (

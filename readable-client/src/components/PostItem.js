@@ -31,7 +31,7 @@ const SubTitle = ({ author, timestamp }) => {
 };
 
 const PostItem = ({ post }) => (
-  <Link to={`/posts/${post.id}`} key={post.id}>
+  <Link to={`/posts/${post.id}`}>
     <Card>
       <ListItem
         primaryText={

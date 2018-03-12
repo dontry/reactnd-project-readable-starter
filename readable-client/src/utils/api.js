@@ -21,8 +21,8 @@ export function getPostById(id) {
     return ax.get(`${ROOT_URL}/posts/${encodeURIComponent(id)}`);
 }
 
-export function updatePostById(id, {title, body}) {
-    return ax.put(`${ROOT_URL}/posts/${encodeURIComponent(id)}`, {title, body});
+export function updatePostById(id, post) {
+    return ax.put(`${ROOT_URL}/posts/${encodeURIComponent(id)}`, {...post});
 }
 
 export function createPost(post) {
@@ -33,8 +33,8 @@ export function deletePostById(id) {
     return ax.delete(`${ROOT_URL}/posts/${encodeURIComponent(id)}`);
 }
 
-export function voteForPostById(id, option) { //option: "upVote" or "downVote"
-    return ax.post(`${ROOT_URL}/posts/${encodeURIComponent(id)}`, option);
+export function votePostById(id, option) { //option: "upVote" or "downVote"
+    return ax.post(`${ROOT_URL}/posts/${encodeURIComponent(id)}`, {option});
 }
 
 export function getCommentById(id) {

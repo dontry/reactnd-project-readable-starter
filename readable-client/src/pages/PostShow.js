@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import PostDetailContainer from "../containers/PostDetailContainer";
 import NavHeader from "../components/NavHeader";
-import PostDetail from "../components/PostDetail";
 
 class PostShow extends Component {
   render() {
     return (
       <div>
-        <NavHeader name="Post Detail" />
-        <PostDetail id={this.props.match.params.id} />
+        <NavHeader title="Blog Post" />
+        <PostDetailContainer postId={this.props.match.params.id} />
       </div>
     );
   }

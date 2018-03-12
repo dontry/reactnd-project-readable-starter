@@ -2,15 +2,17 @@ import { connect } from "react-redux";
 import {
   fetchPosts,
   fetchPostsByCategory,
-  fetchPostsSuccess,
-  fetchPostsFailure,
   resetFetchedPosts
 } from "../actions/posts";
 import PostsList from "../components/PostsList";
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
+  const category = ownProps.category;
+  const allPosts = state.posts.postsList.posts;
   return {
-    postsList: state.posts.postsList
+    posts: category
+      ? allPosts.filter(post => post.category === category)
+      : allPosts
   };
 };
 
@@ -23,7 +25,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(fetchPosts());
     },
     fetchPostsByCategory: category => {
-      dispatch(fetchPostsByCategory(category))
+      dispatch(fetchPostsByCategory(category));
     }
   };
 };

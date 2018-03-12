@@ -1,25 +1,18 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 import {
   fetchPost,
-  fetchPostSuccess,
-  fetchPostFailure,
-  resetFetchedPost,
   deletePost,
-  deletePostSuccess,
-  deletePostFailure,
+  resetFetchedPost,
   resetDeletedPost,
-  fetchPostsSuccess,
   votePost,
-  votePostSuccess,
-  votePostFailure
 } from "../actions/posts";
-import PostDetail from '../components/PostDetail';
+import PostDetail from "../components/PostDetail";
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    post: state.posts.activePost,
-    postId: id
+    post: state.posts.activePost.post,
+    postId: ownProps.postId
   };
 };
 
@@ -30,25 +23,13 @@ const mapDispatchToProps = dispatch => {
       dispatch(resetDeletedPost());
     },
     fetchPost: id => {
-      dispatch(fetchPost(id)).then(res => {
-        !res.error
-          ? dispatch(fetchPostSuccess(res.data))
-          : dispatch(fetchPostsFailure(res.error));
-      });
+      dispatch(fetchPost(id));
     },
     deletePost: id => {
-      dispatch(deletePost(id)).then(res => {
-        !res.error
-          ? dispatch(deletePostSuccess(res.data))
-          : dispatch(deletePostFailure(res.error));
-      });
+      dispatch(deletePost(id));
     },
     votePost: (id, option) => {
-      dispatch(votePost(id, option)).then(res => {
-        !res.error
-        ? dispatch(votePostSuccess(res.data))
-        : dispatch(votePostFailure(res.error));
-      })
+      dispatch(votePost(id, option));
     }
   };
 };
