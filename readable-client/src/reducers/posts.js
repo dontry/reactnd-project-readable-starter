@@ -25,10 +25,10 @@ import {
 } from "../actions/posts";
 
 const INITIAL_STATE = {
-  postsList: { posts: [], error: null, loading: false },
-  newPost: { post: null, error: null, loading: false },
-  activePost: { post: null, error: null, loading: false },
-  deletedPost: { post: null, error: null, loading: false }
+  postsList: { entity: [], error: null, loading: false },
+  newPost: { entity: null, error: null, loading: false },
+  activePost: { entity: null, error: null, loading: false },
+  deletedPost: { entity: null, error: null, loading: false }
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -37,22 +37,22 @@ export default function(state = INITIAL_STATE, action) {
     //Fetch post list
     case REQUEST_FETCH_POSTS:
     case REQUEST_FETCH_POSTS_BY_CATEGORY:
-      return { ...state, postsList: { posts: [], error: null, loading: true } };
+      return { ...state, postsList: { entity: [], error: null, loading: true } };
     case FETCH_POSTS_SUCCESS:
       return {
         ...state,
-        postsList: { posts: action.payload, error: null, loading: false }
+        postsList: { entity: action.payload, error: null, loading: false }
       };
     case FETCH_POSTS_FAILURE:
       error = action.payload || { message: action.payload.message };
       return {
         ...state,
-        postsList: { posts: [], error: error, loading: false }
+        postsList: { entity: [], error: error, loading: false }
       };
     case RESET_FETCHED_POSTS:
       return {
         ...state,
-        postsList: { posts: [], error: null, loading: false }
+        postsList: { entity: [], error: null, loading: false }
       };
     //Fetch a post
     case REQUEST_FETCH_POST:
@@ -60,18 +60,18 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_POST_SUCCESS:
       return {
         ...state,
-        activePost: { post: action.payload, error: null, loading: false }
+        activePost: { entity: action.payload, error: null, loading: false }
       };
     case FETCH_POST_FAILURE:
       error = action.payload || { message: action.payload.message };
       return {
         ...state,
-        activePost: { post: null, error: error, loading: false }
+        activePost: { entity: null, error: error, loading: false }
       };
     case RESET_FETCHED_POST:
       return {
         ...state,
-        activePost: { post: null, error: null, loading: false }
+        activePost: { entity: null, error: null, loading: false }
       };
     //Create a post
     case REQUEST_ADD_POST:
@@ -79,17 +79,17 @@ export default function(state = INITIAL_STATE, action) {
     case ADD_POST_SUCCESS:
       return {
         ...state,
-        newPost: { post: action.payload, error: null, loading: false }
+        newPost: { entity: action.payload, error: null, loading: false }
       };
     case ADD_POST_FAILURE:
       return {
         ...state,
-        newPost: { post: null, error: null, loading: false }
+        newPost: { entity: null, error: null, loading: false }
       };
     case RESET_NEW_POST:
       return {
         ...state,
-        newPost: { post: null, error: null, loading: false }
+        newPost: { enitty: null, error: null, loading: false }
       };
     //Update a post including voting
     case REQUEST_UPDATE_POST:
@@ -101,12 +101,12 @@ export default function(state = INITIAL_STATE, action) {
     case UPDATE_POST_SUCCESS:
       return {
         ...state,
-        activePost: { post: action.payload, error: null, loading: false }
+        activePost: { entity: action.payload, error: null, loading: false }
       };
     case UPDATE_POST_FAILURE:
       return {
         ...state,
-        activePost: { post: null, error: null, loading: false }
+        activePost: { entity: null, error: null, loading: false }
       };
     //Delete a post
     case REQUEST_DELETE_POST:
@@ -114,18 +114,18 @@ export default function(state = INITIAL_STATE, action) {
     case DELETE_POST_SUCCESS:
       return {
         ...state,
-        deletedPost: { post: action.payload, error: null, loading: false }
+        deletedPost: { entity: action.payload, error: null, loading: false }
       };
     case DELETE_POST_FAILURE:
       error = action.payload || { message: action.payload.message };
       return {
         ...state,
-        deletedPost: { post: action.payload, error: error, loading: false }
+        deletedPost: { entity: action.payload, error: error, loading: false }
       };
     case RESET_DELETED_POST:
       return {
         ...state,
-        deletedPost: { post: null, error: null, loading: false }
+        deletedPost: { entity: null, error: null, loading: false }
       };
     default:
       return state;

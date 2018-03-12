@@ -54,16 +54,22 @@ class PostsList extends Component {
     const { selectedOption } = this.state;
     const sortMethod =
       selectedOption === SORT_VOTESCORE ? sortVotescore : sortTimestamp;
-    return posts.sort(sortMethod).map(post => <PostItem key={post.id} post={post} />);
+    return posts
+      .sort(sortMethod)
+      .map(post => <PostItem key={post.id} post={post} />);
   };
 
   render() {
-    const posts = !!this.props.posts ? this.props.posts : [];
+    const posts = this.props.posts || [];
     const { selectedOption } = this.state;
     const PostItems = this.createPostItems(posts);
     return (
       <div>
-        <SortButtonGroup onChange={this.handleChange} defaultValue={selectedOption} options={sortOptions}/>
+        <SortButtonGroup
+          onChange={this.handleChange}
+          defaultValue={selectedOption}
+          options={sortOptions}
+        />
         <List>{PostItems}</List>
       </div>
     );

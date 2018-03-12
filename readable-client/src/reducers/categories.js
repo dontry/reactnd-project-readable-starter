@@ -5,7 +5,7 @@ import {
 } from "../actions/categories";
 
 const INITIAL_STATE = {
-  categoriesList: { categories: [], error: null, loading: false }
+  categoriesList: { entity: [], error: null, loading: false }
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -14,19 +14,19 @@ export default function(state = INITIAL_STATE, action) {
     case REQUEST_FETCH_CATEGORIES:
       return {
         ...state,
-        categoriesList: { categories: [], error: null, loading: true }
+        categoriesList: { entity: [], error: null, loading: true }
       };
       break;
     case FETCH_CATEGORIES_SUCCESS:
       return {
         ...state,
-        categoriesList: { categories: action.payload, error: null, loading: false }
+        categoriesList: { entity: action.payload, error: null, loading: false }
       };
     case FETCH_CATEGORIES_FAILURE:
       error = action.payload || { message: action.payload.message };
       return {
         ...state,
-        categoriesList: { categories: [], error: error, loading: false }
+        categoriesList: { entity: [], error: error, loading: false }
       };
     default:
       return state;

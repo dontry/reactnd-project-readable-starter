@@ -5,8 +5,8 @@ import PostForm from "../components/PostForm";
 
 const mapStateToProps = state => {
   return {
-    post: state.posts.newPost.post,
-    categories: state.categories.categoriesList.categories
+    post: state.posts.newPost.entity,
+    categories: state.categories.categoriesList.entity
   };
 };
 

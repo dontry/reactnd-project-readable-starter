@@ -11,7 +11,7 @@ import PostDetail from "../components/PostDetail";
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    post: state.posts.activePost.post,
+    post: state.posts.activePost.entity,
     postId: ownProps.postId
   };
 };

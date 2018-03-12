@@ -1,65 +1,75 @@
-import React, { Component } from 'react';
-import Comment from './Comment';
-import List from 'material-ui/List';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import MenuItem from 'material-ui/MenuItem';
-import  SortButtonGroup  from './SortButtonGroup';
+import React, { Component } from "react";
+import CommentItem from "./CommentItem";
+import List from "material-ui/List";
+import DropDownMenu from "material-ui/DropDownMenu";
+import MenuItem from "material-ui/MenuItem";
+import SortButtonGroup from "./SortButtonGroup";
 
 const SORT_VOTESCORE = 1;
 const SORT_TIMESTAMP = 2;
 
 const sortOptions = [
-    {
-        value: SORT_VOTESCORE,
-        text: 'Sort by vote'
-    },
-    {
-        value: SORT_TIMESTAMP,
-        text: 'Sort by time'
-    }
-]
+  {
+    value: SORT_VOTESCORE,
+    text: "Sort by vote"
+  },
+  {
+    value: SORT_TIMESTAMP,
+    text: "Sort by time"
+  }
+];
 
-const sortVotescore = (a, b) => (a.voteScore < b.voteScore);
-const sortTimestamp = (a, b) => (a.timestamp < b.timestamp);
+const sortVotescore = (a, b) => a.voteScore < b.voteScore;
+const sortTimestamp = (a, b) => a.timestamp < b.timestamp;
 
 class CommentList extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            comments: props.comments.sort(sortVotescore),
-            selectedOption: SORT_VOTESCORE
-        }
-    }
+  state = {
+    comments: this.props.comments || [],
+    selectedOption: SORT_VOTESCORE
+  };
 
+  componentDidMount() {
+    this.props.fetchComments(this.props.postId);
+  }
 
-    handleChange = (event, index, value) => {
-        const { comments } = this.state;
-        let sortMethod = null;
-        switch (value) {
-            case SORT_VOTESCORE:
-                sortMethod = sortVotescore;
-                break;
-            case SORT_TIMESTAMP:
-                sortMethod = sortTimestamp;
-                break;
-            default:
-                break;
-        }
-        this.setState({
-            comments: comments.sort(sortMethod),
-            selectedOption: value
-        })
-    }
+  handleChange = (event, index, value) => {
+    this.setState({
+      selectedOption: value
+    });
+  };
 
-    render() {
-        const children = this.state.comments.map((comment) => <Comment key={comment.id} comment={comment} />)
-        return (
-            <div>
-                <SortButtonGroup onChange={this.handleChange} defaultValue={this.state.selectedOption} options={sortOptions} />
-                <List>{children}</List>
-            </div>
-        )
-    }
+  createCommentItems = comments => {
+    if (comments.length === 0) return <span>No comments</span>;
+    const { selectedOption } = this.state;
+    const sortMethod =
+      selectedOption === SORT_VOTESCORE ? sortVotescore : sortTimestamp;
+    return comments
+      .sort(sortMethod)
+      .map(comment => (
+        <CommentItem
+          key={comment.id}
+          comment={comment}
+          handleDelete={this.props.deleteComment}
+          handleDialog={this.props.openDialog}
+          handleFetchComment={this.props.fetchComment}
+        />
+      ));
+  };
+
+  render() {
+    const comments = this.props.comments || [];
+    const children = this.createCommentItems(comments);
+    return (
+      <div>
+        <SortButtonGroup
+          onChange={this.handleChange}
+          defaultValue={this.state.selectedOption}
+          options={sortOptions}
+        />
+        <List>{children}</List>
+      </div>
+    );
+  }
 }
 
 export default CommentList;

@@ -59,7 +59,7 @@ class PostForm extends Component {
     router: () => true //context
   };
   state = {
-    post: !!this.props.post ? this.props.post : InitNewPost()
+    post: this.props.post || InitNewPost()
   };
   componentWillMount() {
     this.props.reset && this.props.reset();

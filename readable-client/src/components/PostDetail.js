@@ -44,7 +44,7 @@ const Subtitle = ({ author, timestamp, category }) => {
   );
 };
 
-const Body = ({ body }) => <CardText expandable={true}>{body}</CardText>;
+const Body = ({ body }) => <CardText expandable={false}>{body}</CardText>;
 
 const ButtonGroup = ({ id, handleDelete }) => (
   <span style={styles.wrapper}>
@@ -58,10 +58,6 @@ const ButtonGroup = ({ id, handleDelete }) => (
 class PostDetail extends Component {
   static contextTypes = {
     router: () => true //context
-  };
-  state = {
-    comments: [],
-    isCommentListOpen: false
   };
 
   componentWillMount() {
@@ -84,13 +80,9 @@ class PostDetail extends Component {
     };
   };
 
-  toggleCommentList = () => {
-    this.setState({ isCommentListOpen: !this.state.isCommentListOpen });
-  };
   render() {
-    const { post } = this.props;
+    const { post, handleCommentList } = this.props;
     if (!post) return <div />;
-    const { comments, isCommentListOpen } = this.state;
     return (
       <div>
         <Card style={styles.card}>
@@ -103,8 +95,8 @@ class PostDetail extends Component {
                 category={post.category}
               />
             }
-            actAsExpander={true}
-            showExpandableButton={true}
+            actAsExpander={false}
+            showExpandableButton={false}
           />
           <Body body={post.body} />
           <CardActions>
@@ -115,8 +107,8 @@ class PostDetail extends Component {
             />
             <FlatButton
               icon={<Comment color={grey400} />}
-              onClick={this.toggleCommentList}
-              label={!!post.commentCount ? post.commentCount : 0}
+              onClick={handleCommentList}
+              label={!!post.commentCount ? post.commentCount : "0"}
             />
             <ButtonGroup
               id={post.id}

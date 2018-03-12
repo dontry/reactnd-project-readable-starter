@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import PostCreateContainer from "../containers/PostCreateContainer";
 import PostEditContainer from "../containers/PostEditContainer";
-import NavHeaderContainer from '../containers/NavHeaderContainer';
+import NavHeader from '../components/NavHeader';
 
 class PostEditor extends Component {
   render() {
     const id = this.props.match.params.id;
     return (
       <div>
-        <NavHeaderContainer title="Editor"/>
+        <NavHeader title="Editor"/>
         {id ? <PostEditContainer /> : <PostCreateContainer />}
       </div>
     );
