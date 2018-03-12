@@ -23,6 +23,26 @@ const defaultData = {
     voteScore: -5,
     deleted: false,
     parentDeleted: false
+  },
+  "8tu4bsun80548ve89": {
+    id: '8tu4bsun80548ve89',
+    parentId: "8xf0y6ziyjabvozdd253nd",
+    timestamp: 1469479768190,
+    body: 'Make American Great Again',
+    author: 'donald',
+    voteScore: -15,
+    deleted: false,
+    parentDeleted: false
+  },
+  "8xf0y6ziydxywerm": {
+    id: '8xf0y6ziydxywerm',
+    parentId: "8xf0y6ziydxywermBzx123",
+    timestamp: 1469479768190,
+    body: 'Redux is awesome and yet troublesome',
+    author: 'lily',
+    voteScore: 100,
+    deleted: false,
+    parentDeleted: false
   }
 }
 

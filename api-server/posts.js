@@ -12,7 +12,7 @@ const defaultData = {
     category: 'react',
     voteScore: 6,
     deleted: false,
-    commentCount: 2
+    commentCount: 3
   },
   "8xf0y6ziydxywermBzx123": {
     id: '8xf0y6ziydxywermBzx123',
