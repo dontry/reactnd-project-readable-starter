@@ -41,7 +41,7 @@ class CommentItem extends Component {
   handleVote = function(option) {
     const _this = this;
     return function() {
-      _this.props.votePost && _this.props.votePost(_this.props.postId, option);
+      _this.props.handleVoteComment && _this.props.handleVoteComment(_this.props.comment.id, option);
     };
   };
 

@@ -45,6 +45,10 @@ export function createComment(comment) {
     return ax.post(`${ROOT_URL}/comments`, comment);
 }
 
+export function voteCommentById(id, option) {
+    return ax.post(`${ROOT_URL}/comments/${encodeURIComponent(id)}`, {option});
+}
+
 export function updateCommentById(id, {timestamp, body}) {
     return ax.put(`${ROOT_URL}/comments/${encodeURIComponent(id)}`, {timestamp, body});
 }

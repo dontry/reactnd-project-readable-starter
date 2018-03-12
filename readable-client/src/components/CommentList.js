@@ -24,7 +24,6 @@ const sortTimestamp = (a, b) => a.timestamp < b.timestamp;
 
 class CommentList extends Component {
   state = {
-    comments: this.props.comments || [],
     selectedOption: SORT_VOTESCORE
   };
 
@@ -52,18 +51,20 @@ class CommentList extends Component {
           handleDelete={this.props.deleteComment}
           handleDialog={this.props.openDialog}
           handleFetchComment={this.props.fetchComment}
+          handleVoteComment={this.props.voteComment}
         />
       ));
   };
 
   render() {
     const comments = this.props.comments || [];
+    const { selectedOption } = this.state;
     const children = this.createCommentItems(comments);
     return (
       <div>
         <SortButtonGroup
           onChange={this.handleChange}
-          defaultValue={this.state.selectedOption}
+          defaultValue={selectedOption}
           options={sortOptions}
         />
         <List>{children}</List>

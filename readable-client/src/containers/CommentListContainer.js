@@ -1,5 +1,11 @@
 import { connect } from "react-redux";
-import { fetchComments, deleteComment, fetchComment, openCommentDialog } from "../actions/comments";
+import {
+  fetchComments,
+  deleteComment,
+  fetchComment,
+  openCommentDialog,
+  voteComment
+} from "../actions/comments";
 import CommentList from "../components/CommentList";
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -15,11 +21,14 @@ const mapDispatchToProps = dispatch => {
     fetchComment: id => {
       dispatch(fetchComment(id));
     },
-    deleteComment: commentId => {
-      dispatch(deleteComment(commentId));
+    deleteComment: id => {
+      dispatch(deleteComment(id));
+    },
+    voteComment: (id, option) => {
+      dispatch(voteComment(id, option));
     },
     openDialog: () => {
-        dispatch(openCommentDialog());
+      dispatch(openCommentDialog());
     }
   };
 };

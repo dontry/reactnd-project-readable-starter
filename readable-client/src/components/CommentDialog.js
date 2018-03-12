@@ -46,17 +46,27 @@ const ButtonGroup = ({ handleSubmit, handleCancel }) => (
 
 class CommentDialog extends Component {
   state = {
-    comment: this.props.comment || initialComment(this.props.postId)
+    comment: this.props.comment || initialComment(this.props.postId),
+    isCreate: !this.props.comment
   };
 
   componentWillReceiveProps(nextProps) {
-    this.setState({comment: nextProps.comment})
+    const activeComment =
+      nextProps.comment || initialComment(this.props.postId);
+    this.setState({ comment: activeComment, isCreate: !nextProps.comment });
   }
 
   handleSubmit = () => {
     const { comment } = this.state;
     this.props.closeDialog();
-    this.props.updateComment(comment.id, { ...comment, timestamp: Date.now() });
+    if (this.state.isCreate) {
+      this.props.addComment({ ...comment, timestamp: Date.now() });
+    } else {
+      this.props.updateComment(comment.id, {
+        ...comment,
+        timestamp: Date.now()
+      });
+    }
   };
 
   handleChange = fieldName => event => {
@@ -78,8 +88,8 @@ class CommentDialog extends Component {
         title="Comment"
         actions={
           <ButtonGroup
-            handleSubmit={this.handleSubmit}
-            handleCancel={this.handleCancel}
+            handleSubmit={this.handleSubmit.bind(this)}
+            handleCancel={this.handleCancel.bind(this)}
           />
         }
         modal={true}

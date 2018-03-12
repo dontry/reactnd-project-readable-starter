@@ -4,6 +4,7 @@ import NavHeader from "../components/NavHeader";
 import PostDetailContainer from "../containers/PostDetailContainer";
 import CommentListContainer from "../containers/CommentListContainer";
 import CommentDialogContainer from "../containers/CommentDialogContainer";
+import AddCommentButtonContainer from "../containers/AddNewButtonContainer";
 
 class PostShow extends Component {
   state = {
@@ -18,8 +19,9 @@ class PostShow extends Component {
     return (
       <div>
         <NavHeader title="Blog Post" />
-        <PostDetailContainer postId={postId} handleCommentList={this.toggleCommentList.bind(this)}/>
+        <PostDetailContainer postId={postId} handleCommentList={this.toggleCommentList.bind(this)} commentListOpen={commentListOpen}/>
         {commentListOpen && <CommentListContainer postId={postId} />}
+        <AddCommentButtonContainer />
         <CommentDialogContainer postId={postId} />
       </div>
     );

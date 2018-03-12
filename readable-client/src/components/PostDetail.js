@@ -7,7 +7,7 @@ import Comment from "material-ui/svg-icons/communication/comment";
 import SubtitleComponent from "./SutitleComponent";
 import VoteButtonGroup from "./VoteButtonGroup";
 import { Link } from "react-router-dom";
-import { grey400 } from "material-ui/styles/colors";
+import { grey400, grey600 } from "material-ui/styles/colors";
 
 const styles = {
   card: {
@@ -51,7 +51,7 @@ const ButtonGroup = ({ id, handleDelete }) => (
     <Link to={`/posts/${encodeURIComponent(id)}/edit`}>
       <RaisedButton style={styles.button} label="Edit" primary={true} />
     </Link>
-    <FlatButton style={styles.button} label="Delete" onClick={handleDelete} />
+    <FlatButton style={styles.button} label="Delete" secondary={true} onClick={handleDelete} />
   </span>
 );
 
@@ -81,8 +81,8 @@ class PostDetail extends Component {
   };
 
   render() {
-    const { post, handleCommentList } = this.props;
-    if (!post) return <div />;
+    const { post, handleCommentList, commentListOpen } = this.props;
+    if (!post) return <div ></div>;
     return (
       <div>
         <Card style={styles.card}>
@@ -106,9 +106,9 @@ class PostDetail extends Component {
               handleVote={this.handleVote.bind(this)}
             />
             <FlatButton
-              icon={<Comment color={grey400} />}
+              icon={commentListOpen ? <Comment color={grey600} /> : <Comment color={grey400} />}
               onClick={handleCommentList}
-              label={!!post.commentCount ? post.commentCount : "0"}
+              // label={!!post.commentCount ? post.commentCount : "0"}
             />
             <ButtonGroup
               id={post.id}

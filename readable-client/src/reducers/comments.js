@@ -14,7 +14,8 @@ import {
   DELETE_COMMENT_FAILURE,
   DELETE_COMMENT_SUCCESS,
   OPEN_COMMENT_DIALOG,
-  CLOSE_COMMENT_DIALOG
+  CLOSE_COMMENT_DIALOG,
+  updateComment
 } from "../actions/comments";
 
 const INITIAL_STATE = {
@@ -63,8 +64,14 @@ export default function(state = INITIAL_STATE, action) {
         newComment: { entity: null, error: null, loading: true }
       };
     case ADD_COMMENT_SUCCESS:
+      let currentComentlist = state.commentsList.entity;
+      // currentComentlist.push(action.payload);
       return {
         ...state,
+        commentsList: {
+          ...state.commentsList,
+          entity: [...state.commentsList.entity, action.payload]
+        },
         newComment: { entity: action.payload, error: null, loading: false }
       };
     case ADD_COMMENT_FAILURE:
@@ -73,16 +80,27 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         newComment: { entity: null, error: error, loading: false }
       };
-
     case REQUEST_UPDATE_COMMENT:
       return {
         ...state,
         activeComment: { ...state.activeComment, loading: true }
       };
     case UPDATE_COMMENT_SUCCESS:
+      const updatedComment = action.payload;
+      const updateCommentListEntity = state.commentsList.entity.map(comment => {
+        if (comment.id === updatedComment.id) {
+          return updatedComment;
+        } else {
+          return comment;
+        }
+      });
       return {
         ...state,
-        activeComment: { entity: action.payload, error: null, loading: false }
+        commentsList: {
+          ...state.commentsList,
+          entity: updateCommentListEntity
+        },
+        activeComment: { entity: updateComment, error: null, loading: false }
       };
     case UPDATE_COMMENT_FAILURE:
       error = action.payload || { meesage: action.payload.message };
@@ -96,9 +114,15 @@ export default function(state = INITIAL_STATE, action) {
         deletedComment: { ...state.deletedComment, loading: true }
       };
     case DELETE_COMMENT_SUCCESS:
+      const deletedComment = action.payload;
+      const updatedCommentListEntity = state.commentsList.entity.filter(comment => comment.id !== deletedComment.id);
       return {
         ...state,
-        deletedComment: { entity: action.payload, eror: null, loading: false }
+        commentsList: {
+          ...state.commentsList,
+          entity: updatedCommentListEntity
+        },
+        deletedComment: { entity: deletedComment, eror: null, loading: false }
       };
     case DELETE_COMMENT_FAILURE:
       error = action.payload || { meesage: action.payload.message };

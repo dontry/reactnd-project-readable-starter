@@ -54,18 +54,17 @@ function fetchCommentsFailure(error) {
 }
 
 export function fetchComment(postId) {
-    return {
-        type: FETCH_COMMENT,
-        payload: postId
-    }
+  return {
+    type: FETCH_COMMENT,
+    payload: postId
+  };
 }
 
 export function resetFetchComment() {
-    return {
-        type: RESET_FETCHED_COMMENT
-    }
+  return {
+    type: RESET_FETCHED_COMMENT
+  };
 }
-
 
 export function addComment(comment) {
   return dispatch => {
@@ -103,8 +102,8 @@ export function updateComment(id, comment) {
     dispatch(requestUpdateComment());
     api.updateCommentById(id, comment).then(res => {
       !res.error
-        ? dispatch(updateCommentsSuccess(res.data))
-        : dispatch(updateCommentsFailure(res.error));
+        ? dispatch(updateCommentSuccess(res.data))
+        : dispatch(updateCommentFailure(res.error));
     });
   };
 }
@@ -115,14 +114,24 @@ function requestUpdateComment() {
   };
 }
 
-export function updateCommentsSuccess(comment) {
+export function voteComment(id, option) {
+  return dispatch => {
+    api.voteCommentById(id, option).then(res => {
+      !res.error
+        ? dispatch(updateCommentSuccess(res.data))
+        : dispatch(updateCommentFailure(res.error));
+    });
+  };
+}
+
+function updateCommentSuccess(comment) {
   return {
     type: UPDATE_COMMENT_SUCCESS,
     payload: comment
   };
 }
 
-export function updateCommentsFailure(error) {
+function updateCommentFailure(error) {
   return {
     type: UPDATE_COMMENT_FAILURE,
     payload: error
@@ -138,7 +147,7 @@ export function deleteComment(id) {
         : dispatch(deleteCommentsFailure(res.error));
     });
   };
-};
+}
 
 function requestDeleteComment() {
   return {
@@ -161,13 +170,13 @@ function deleteCommentsFailure(error) {
 }
 
 export function openCommentDialog() {
-    return {
-        type: OPEN_COMMENT_DIALOG
-    }
+  return {
+    type: OPEN_COMMENT_DIALOG
+  };
 }
 
 export function closeCommentDialog() {
-    return {
-        type: CLOSE_COMMENT_DIALOG
-    }
+  return {
+    type: CLOSE_COMMENT_DIALOG
+  };
 }
