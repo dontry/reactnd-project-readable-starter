@@ -6,6 +6,7 @@ import RaisedButton from "material-ui/RaisedButton";
 import FlatButton from "material-ui/FlatButton";
 import { withRouter } from "react-router-dom";
 import uniqid from "uniqid";
+import { isRequired } from "../utils/validations";
 
 const styles = {
   card: {
@@ -24,6 +25,8 @@ const styles = {
     display: "block"
   }
 };
+
+const requiredField = isRequired('This field is required');
 
 const InitNewPost = () => ({
   id: uniqid(),
@@ -99,6 +102,7 @@ class PostForm extends Component {
           style={styles.titleField}
           value={post.title}
           onChange={this.handleChangeField("title").bind(this)}
+          errorText={requiredField(post.title.trim())}
         />
         <CategoryDropdownMenu
           selected={post.category}
@@ -111,6 +115,7 @@ class PostForm extends Component {
           floatingLabelText="Author"
           value={post.author}
           onChange={this.handleChangeField("author").bind(this)}
+          errorText={requiredField(post.author.trim())}
         />
         <TextField
           name="body"
@@ -120,6 +125,7 @@ class PostForm extends Component {
           rows={3}
           value={post.body}
           onChange={this.handleChangeField("body").bind(this)}
+          errorText={requiredField(post.body.trim())}
         />
         <ButtonGroup
           handleSubmit={this.handleSubmit.bind(this)}

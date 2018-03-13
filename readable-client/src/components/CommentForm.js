@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import TextField from "material-ui/TextField/TextField";
+import { isRequired } from "../utils/validations";
+
+const requiredField = isRequired('This field is required.');
 
 const CommentForm = ({ comment, handleChange }) => {
   return (
@@ -8,7 +11,7 @@ const CommentForm = ({ comment, handleChange }) => {
         name="author"
         floatingLabelText="Author"
         value={comment.author}
-        // errorText="This field is required"
+        errorText={requiredField(comment.author.trim())}
         onChange={handleChange("author")}
       />
       <TextField
@@ -16,7 +19,7 @@ const CommentForm = ({ comment, handleChange }) => {
         hintText="Pleaes write here..."
         fullWidth={true}
         value={comment.body}
-        // errorText="This field is required"
+        errorText={requiredField(comment.body.trim())}
         onChange={handleChange("body")}
       />
     </div>

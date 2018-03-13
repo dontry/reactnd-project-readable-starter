@@ -6,6 +6,7 @@ import Chip from "material-ui/Chip";
 import Comment from "material-ui/svg-icons/communication/comment";
 import SubtitleComponent from "./SutitleComponent";
 import VoteButtonGroup from "./VoteButtonGroup";
+import ConfirmationDialog from "./ConfirmationDialog";
 import { Link } from "react-router-dom";
 import { grey400, grey600 } from "material-ui/styles/colors";
 
@@ -51,13 +52,22 @@ const ButtonGroup = ({ id, handleDelete }) => (
     <Link to={`/posts/${encodeURIComponent(id)}/edit`}>
       <RaisedButton style={styles.button} label="Edit" primary={true} />
     </Link>
-    <FlatButton style={styles.button} label="Delete" secondary={true} onClick={handleDelete} />
+    <FlatButton
+      style={styles.button}
+      label="Delete"
+      secondary={true}
+      onClick={handleDelete}
+    />
   </span>
 );
 
 class PostDetail extends Component {
   static contextTypes = {
     router: () => true //context
+  };
+
+  state = {
+    openDialog: false
   };
 
   componentWillMount() {
@@ -80,9 +90,22 @@ class PostDetail extends Component {
     };
   };
 
+  handleOpenDialog = () => {
+    this.setState({ open: true });
+  };
+
+  handleSubmit = () => {
+    this.handleDelete();
+  };
+
+  handleCancel = () => {
+    this.setState({ open: false });
+  };
+
   render() {
     const { post, handleCommentList, commentListOpen } = this.props;
-    if (!post) return <div ></div>;
+    const { open } = this.state;
+    if (!post) return <div />;
     return (
       <div>
         <Card style={styles.card}>
@@ -106,16 +129,29 @@ class PostDetail extends Component {
               handleVote={this.handleVote.bind(this)}
             />
             <FlatButton
-              icon={commentListOpen ? <Comment color={grey600} /> : <Comment color={grey400} />}
+              icon={
+                commentListOpen ? (
+                  <Comment color={grey600} />
+                ) : (
+                  <Comment color={grey400} />
+                )
+              }
               onClick={handleCommentList}
               // label={!!post.commentCount ? post.commentCount : "0"}
             />
             <ButtonGroup
               id={post.id}
-              handleDelete={this.handleDelete.bind(this)}
+              handleDelete={this.handleOpenDialog.bind(this)}
             />
           </CardActions>
         </Card>
+        <ConfirmationDialog
+          title="Delete the post"
+          content="Are you sure to delete this blog post?"
+          handleSubmit={this.handleSubmit.bind(this)}
+          handleCancel={this.handleCancel.bind(this)}
+          open={open}
+        />
       </div>
     );
   }

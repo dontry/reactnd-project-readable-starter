@@ -28,7 +28,7 @@ const sortTimestamp = (a, b) => a.timestamp < b.timestamp;
 
 class PostsList extends Component {
   state = {
-    selectedOption: SORT_VOTESCORE
+    selectedSortMethod: SORT_VOTESCORE
   };
 
   componentWillMount() {
@@ -51,9 +51,9 @@ class PostsList extends Component {
   };
 
   createPostItems = posts => {
-    const { selectedOption } = this.state;
+    const { selectedSortMethod } = this.state;
     const sortMethod =
-      selectedOption === SORT_VOTESCORE ? sortVotescore : sortTimestamp;
+      selectedSortMethod === SORT_VOTESCORE ? sortVotescore : sortTimestamp;
     return posts
       .sort(sortMethod)
       .map(post => <PostItem key={post.id} post={post} />);
@@ -61,13 +61,13 @@ class PostsList extends Component {
 
   render() {
     const posts = this.props.posts || [];
-    const { selectedOption } = this.state;
+    const { selectedSortMethod } = this.state;
     const PostItems = this.createPostItems(posts);
     return (
       <div>
         <SortButtonGroup
           onChange={this.handleChange}
-          defaultValue={selectedOption}
+          defaultValue={selectedSortMethod}
           options={sortOptions}
         />
         <List>{PostItems}</List>

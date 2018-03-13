@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import CommentItem from "./CommentItem";
 import List from "material-ui/List";
 import DropDownMenu from "material-ui/DropDownMenu";
 import MenuItem from "material-ui/MenuItem";
 import SortButtonGroup from "./SortButtonGroup";
+import CommentItem from "./CommentItem";
 
 const SORT_VOTESCORE = 1;
 const SORT_TIMESTAMP = 2;
@@ -24,7 +24,7 @@ const sortTimestamp = (a, b) => a.timestamp < b.timestamp;
 
 class CommentList extends Component {
   state = {
-    selectedOption: SORT_VOTESCORE
+    selectedSortMethod: SORT_VOTESCORE
   };
 
   componentDidMount() {
@@ -37,11 +37,12 @@ class CommentList extends Component {
     });
   };
 
+
   createCommentItems = comments => {
     if (comments.length === 0) return <span>No comments</span>;
-    const { selectedOption } = this.state;
+    const { selectedSortMethod } = this.state;
     const sortMethod =
-      selectedOption === SORT_VOTESCORE ? sortVotescore : sortTimestamp;
+      selectedSortMethod === SORT_VOTESCORE ? sortVotescore : sortTimestamp;
     return comments
       .sort(sortMethod)
       .map(comment => (
@@ -58,13 +59,13 @@ class CommentList extends Component {
 
   render() {
     const comments = this.props.comments || [];
-    const { selectedOption } = this.state;
+    const { selectedSortMethod } = this.state;
     const children = this.createCommentItems(comments);
     return (
       <div>
         <SortButtonGroup
           onChange={this.handleChange}
-          defaultValue={selectedOption}
+          defaultValue={selectedSortMethod}
           options={sortOptions}
         />
         <List>{children}</List>
