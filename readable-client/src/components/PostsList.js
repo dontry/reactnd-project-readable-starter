@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import PostItem from "./PostItem";
 import { List } from "material-ui/List";
 import SortButtonGroup from "./SortButtonGroup";
+import { Redirect } from "react-router-dom";
+import PageLoading from "./PageLoading";
 
 const SORT_VOTESCORE = 1;
 const SORT_TIMESTAMP = 2;
@@ -46,11 +48,11 @@ class PostsList extends Component {
 
   handleChange = (event, index, value) => {
     this.setState({
-      selectedOption: value
+      selectedSortMethod: value
     });
   };
 
-  createPostItems = posts => {
+  createPostItems = (posts = []) => {
     const { selectedSortMethod } = this.state;
     const sortMethod =
       selectedSortMethod === SORT_VOTESCORE ? sortVotescore : sortTimestamp;
@@ -60,13 +62,21 @@ class PostsList extends Component {
   };
 
   render() {
-    const posts = this.props.posts || [];
+    const { posts } = this.props;
+    if (posts.error) {
+      return <Redirect to="/error/404" />;
+    } else if (posts.loading) {
+      return (
+        <PageLoading />
+      );
+    }
+
     const { selectedSortMethod } = this.state;
-    const PostItems = this.createPostItems(posts);
+    const PostItems = this.createPostItems(posts.entity);
     return (
       <div>
         <SortButtonGroup
-          onChange={this.handleChange}
+          onChange={this.handleChanger}
           defaultValue={selectedSortMethod}
           options={sortOptions}
         />

@@ -1,10 +1,9 @@
-import React, { Component } from "react";
+import React from "react";
 import { Card, CardHeader, CardText } from "material-ui/Card";
 import SubtitleComponent from "./SutitleComponent";
 import CardActions from "material-ui/Card/CardActions";
 import VoteButtonGroup from "./VoteButtonGroup";
 import FlatButton from "material-ui/FlatButton";
-import CommentDialog from "./CommentDialog";
 
 const styles = {
   wrapper: {
@@ -37,49 +36,43 @@ const ButtonGroup = ({ comment, handleEdit, handleDelete }) => {
   );
 };
 
-class CommentItem extends Component {
-  handleVote = function(option) {
-    const _this = this;
-    return function() {
-      _this.props.handleVoteComment && _this.props.handleVoteComment(_this.props.comment.id, option);
-    };
+const CommentItem = props => {
+  const handleVote = option => () => {
+    props.handleVoteComment &&
+      props.handleVoteComment(props.comment.id, option);
   };
 
-  handleEdit = (commentId) => () => {
-    this.props.handleFetchComment(commentId);
-    this.props.handleDialog();
+  const handleEdit = commentId => () => {
+    props.handleFetchComment(commentId);
+    props.handleDialog();
   };
 
-  handleDelete = commentId => () => {
-    this.props.handleDelete(commentId);
+  const handleDelete = commentId => () => {
+    props.handleDelete(commentId);
   };
 
-  render() {
-    const { comment } = this.props;
-    const currentDate = new Date(comment.timestamp);
-    return (
-      <Card>
-        <CardHeader
-          title={<h4>{comment.author}</h4>}
-          subtitle={
-            <SubtitleComponent content={currentDate.toDateString()} />
-          }
+  const { comment } = props;
+  const currentDate = new Date(comment.timestamp);
+  return (
+    <Card>
+      <CardHeader
+        title={<h4>{comment.author}</h4>}
+        subtitle={<SubtitleComponent content={currentDate.toDateString()} />}
+      />
+      <CardText>{comment.body}</CardText>
+      <CardActions>
+        <VoteButtonGroup
+          voteScore={comment.voteScore}
+          handleVote={handleVote}
         />
-        <CardText>{comment.body}</CardText>
-        <CardActions>
-          <VoteButtonGroup
-            voteScore={comment.voteScore}
-            handleVote={this.handleVote.bind(this)}
-          />
-          <ButtonGroup
-            comment={comment}
-            handleDelete={this.handleDelete(comment.id).bind(this)}
-            handleEdit={this.handleEdit(comment.id).bind(this)}
-          />
-        </CardActions>
-      </Card>
-    );
-  }
-}
+        <ButtonGroup
+          comment={comment}
+          handleDelete={handleDelete(comment.id)}
+          handleEdit={handleEdit(comment.id)}
+        />
+      </CardActions>
+    </Card>
+  );
+};
 
 export default CommentItem;

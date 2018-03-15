@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, PropTypes } from "react";
 import { Card, CardActions, CardHeader, CardText } from "material-ui/Card";
 import FlatButton from "material-ui/FlatButton";
 import RaisedButton from "material-ui/RaisedButton";
@@ -7,8 +7,10 @@ import Comment from "material-ui/svg-icons/communication/comment";
 import SubtitleComponent from "./SutitleComponent";
 import VoteButtonGroup from "./VoteButtonGroup";
 import ConfirmationDialog from "./ConfirmationDialog";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { grey400, grey600 } from "material-ui/styles/colors";
+import Loading from "react-loading";
+import PageLoading from "./PageLoading";
 
 const styles = {
   card: {
@@ -71,11 +73,11 @@ class PostDetail extends Component {
   };
 
   componentWillMount() {
-    this.props.reset && this.props.reset();
+    this.props.fetchPost && this.props.fetchPost(this.props.postId);
   }
 
-  componentDidMount() {
-    this.props.fetchPost && this.props.fetchPost(this.props.postId);
+  componentWillUnmount() {
+    this.props.reset && this.props.reset();
   }
 
   handleDelete = () => {
@@ -83,11 +85,8 @@ class PostDetail extends Component {
     this.context.router.history.goBack();
   };
 
-  handleVote = function(option) {
-    const _this = this;
-    return function() {
-      _this.props.votePost && _this.props.votePost(_this.props.postId, option);
-    };
+  handleVote = option => () => {
+    this.props.votePost && this.props.votePost(this.props.postId, option);
   };
 
   handleOpenDialog = () => {
@@ -104,28 +103,39 @@ class PostDetail extends Component {
 
   render() {
     const { post, handleCommentList, commentListOpen } = this.props;
-    const { open } = this.state;
-    if (!post) return <div />;
+    const { open, shouldLoading } = this.state;
+
+    if (post.error) {
+      return <Redirect to="/error/404" />;
+    } else if (post.loading) {
+      return (
+        // <Loading delay={200} type="spin" color="#222" className="loading" />
+        <PageLoading />
+      );
+    } else if (!post.entity) {
+      return <div />;
+    }
+
     return (
       <div>
         <Card style={styles.card}>
           <CardHeader
-            title={<Title title={post.title} />}
+            title={<Title title={post.entity.title} />}
             subtitle={
               <Subtitle
-                author={post.author}
-                timestamp={post.timestamp}
-                category={post.category}
+                author={post.entity.author}
+                timestamp={post.entity.timestamp}
+                category={post.entity.category}
               />
             }
             actAsExpander={false}
             showExpandableButton={false}
           />
-          <Body body={post.body} />
+          <Body body={post.entity.body} />
           <CardActions>
             <VoteButtonGroup
               isRaised
-              voteScore={post.voteScore}
+              voteScore={post.entity.voteScore}
               handleVote={this.handleVote.bind(this)}
             />
             <FlatButton
@@ -140,7 +150,7 @@ class PostDetail extends Component {
               // label={!!post.commentCount ? post.commentCount : "0"}
             />
             <ButtonGroup
-              id={post.id}
+              id={post.entity.id}
               handleDelete={this.handleOpenDialog.bind(this)}
             />
           </CardActions>

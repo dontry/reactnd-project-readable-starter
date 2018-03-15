@@ -8,11 +8,14 @@ import PostsList from "../components/PostsList";
 
 const mapStateToProps = (state, ownProps) => {
   const category = ownProps.category;
-  const allPosts = state.posts.postsList.entity;
+  const allPostsEntity = state.posts.postsList.entity;
   return {
     posts: category
-      ? allPosts.filter(post => post.category === category)
-      : allPosts
+      ? {
+          ...state.posts.postsList,
+          entity: allPostsEntity.filter(post => post.category === category)
+        }
+      : state.posts.postsList
   };
 };
 

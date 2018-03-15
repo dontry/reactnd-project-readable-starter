@@ -9,7 +9,7 @@ import CommentDialog from "../components/CommentDialog";
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    comment: state.comments.activeComment.entity,
+    comment: state.comments.activeComment,
     open: state.comments.dialog.open,
     postId: ownProps.postId
   };

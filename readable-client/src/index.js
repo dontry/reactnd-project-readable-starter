@@ -13,7 +13,7 @@ import Routes from "./Routes";
 const store = createStore(
   rootReducer,
   compose(
-    applyMiddleware(thunkMiddleware),
+    applyMiddleware(thunkMiddleware, createLogger),
     window.devToolsExtension ? window.devToolsExtension() : f => f
   )
 );

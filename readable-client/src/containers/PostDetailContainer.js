@@ -5,13 +5,14 @@ import {
   deletePost,
   resetFetchedPost,
   resetDeletedPost,
-  votePost,
+  votePost
 } from "../actions/posts";
 import PostDetail from "../components/PostDetail";
+import { fetchCategories } from "../actions/categories";
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    post: state.posts.activePost.entity,
+    post: state.posts.activePost,
     postId: ownProps.postId
   };
 };

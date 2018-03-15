@@ -1,10 +1,12 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import Dialog from "material-ui/Dialog";
 import FlabButton from "material-ui/FlatButton";
 import RaisedButton from "material-ui/RaisedButton";
 import FlatButton from "material-ui/FlatButton/FlatButton";
 import CommentForm from "./CommentForm";
 import uuid from "uuid";
+import { Redirect } from "react-router-dom";
+import Loading from "react-loading";
 
 const styles = {
   dialog: {
@@ -28,7 +30,7 @@ const initialComment = postId => ({
 });
 
 const ButtonGroup = ({ handleSubmit, handleCancel }) => (
-  <div>
+  <Fragment>
     <RaisedButton
       style={styles.button}
       label="Submit"
@@ -41,29 +43,33 @@ const ButtonGroup = ({ handleSubmit, handleCancel }) => (
       secondary={true}
       onClick={handleCancel}
     />
-  </div>
+  </Fragment>
 );
 
 class CommentDialog extends Component {
   state = {
-    comment: this.props.comment || initialComment(this.props.postId),
-    isCreate: !this.props.comment
+    commentEntity:
+      this.props.comment.entity || initialComment(this.props.postId),
+    isCreate: !this.props.comment.entity
   };
 
   componentWillReceiveProps(nextProps) {
-    const activeComment =
-      nextProps.comment || initialComment(this.props.postId);
-    this.setState({ comment: activeComment, isCreate: !nextProps.comment });
+    const activeCommentEntity =
+      nextProps.comment.entity || initialComment(this.props.postId);
+    this.setState({
+      commentEntity: activeCommentEntity,
+      isCreate: !nextProps.comment.entity
+    });
   }
 
   handleSubmit = () => {
-    const { comment } = this.state;
+    const { commentEntity } = this.state;
     this.props.closeDialog();
     if (this.state.isCreate) {
-      this.props.addComment({ ...comment, timestamp: Date.now() });
+      this.props.addComment({ ...commentEntity, timestamp: Date.now() });
     } else {
-      this.props.updateComment(comment.id, {
-        ...comment,
+      this.props.updateComment(commentEntity.id, {
+        ...commentEntity,
         timestamp: Date.now()
       });
     }
@@ -71,7 +77,10 @@ class CommentDialog extends Component {
 
   handleChange = fieldName => event => {
     this.setState({
-      comment: { ...this.state.comment, [fieldName]: event.target.value }
+      commentEntity: {
+        ...this.state.commentEntity,
+        [fieldName]: event.target.value
+      }
     });
   };
 
@@ -81,8 +90,16 @@ class CommentDialog extends Component {
   };
 
   render() {
-    const { comment } = this.state;
-    const { open } = this.props;
+    const { comment, open } = this.props;
+    if (comment.error) {
+      return <Redirect to="/error/404" />;
+    } else if (comment.loading) {
+      return (
+        <Loading delay={200} type="spin" color="#222" className="loading" />
+      );
+    }
+
+    const { commentEntity } = this.state;
     return (
       <Dialog
         title="Comment"
@@ -96,7 +113,7 @@ class CommentDialog extends Component {
         contentStyle={styles.dialog}
         open={open}
       >
-        <CommentForm comment={comment} handleChange={this.handleChange} />
+        <CommentForm comment={commentEntity} handleChange={this.handleChange} />
       </Dialog>
     );
   }

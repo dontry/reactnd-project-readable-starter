@@ -7,7 +7,7 @@ import CategoryMenu from "../components/CategoryMenu";
 
 const mapStateToProps = state => {
   return {
-    categories: state.categories.categoriesList.entity
+    categories: state.categories.categoriesList
   }
 };
 

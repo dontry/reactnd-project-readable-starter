@@ -23,7 +23,7 @@ const INITIAL_STATE = {
   newComment: { entity: null, error: null, loading: false },
   activeComment: { entity: null, error: null, loading: false },
   deletedComment: { entity: null, error: null, loading: false },
-  dialog: { open: false }
+  dialog: { open: false}
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -100,7 +100,7 @@ export default function(state = INITIAL_STATE, action) {
           ...state.commentsList,
           entity: updateCommentListEntity
         },
-        activeComment: { entity: updateComment, error: null, loading: false }
+        activeComment: { entity: action.payload, error: null, loading: false }
       };
     case UPDATE_COMMENT_FAILURE:
       error = action.payload || { meesage: action.payload.message };

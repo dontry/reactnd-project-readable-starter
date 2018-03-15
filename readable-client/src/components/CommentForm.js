@@ -1,12 +1,14 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import TextField from "material-ui/TextField/TextField";
 import { isRequired } from "../utils/validations";
 
 const requiredField = isRequired('This field is required.');
 
+
 const CommentForm = ({ comment, handleChange }) => {
+  if(!comment) return <div></div>
   return (
-    <div>
+    <Fragment>
       <TextField
         name="author"
         floatingLabelText="Author"
@@ -22,7 +24,7 @@ const CommentForm = ({ comment, handleChange }) => {
         errorText={requiredField(comment.body.trim())}
         onChange={handleChange("body")}
       />
-    </div>
+    </Fragment>
   );
 };
 

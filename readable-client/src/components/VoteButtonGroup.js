@@ -25,9 +25,6 @@ const DownvoteButton = ({ isRaised, handleClick }) => {
 const VoteButtonGroup = ({isRaised = false, voteScore, handleVote}) => {
     const upVote = handleVote('upVote');
     const downVote = handleVote('downVote');
-    const x = () => {
-        console.log("click");
-    }
     return (
         <span>
             <UpvoteButton isRaised={isRaised} voteScore={voteScore} handleClick={upVote} />

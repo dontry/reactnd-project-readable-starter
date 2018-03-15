@@ -6,6 +6,7 @@ import Chip from "material-ui/Chip";
 import SubtitleComponent from "./SutitleComponent";
 import Assignment from "material-ui/svg-icons/action/assignment";
 import FlatButton from "material-ui/FlatButton";
+import Comment from "material-ui/svg-icons/communication/comment";
 
 const styles = {
   chip: {
@@ -13,10 +14,26 @@ const styles = {
     marginLeft: 10,
     backgroundColor: "#47d8ea"
   },
+  rightIcon: {
+    width: 50,
+    marginRight: 20
+  },
   voteScore: {
+    width: 50,
     paddingTop: 5,
+    textAlign: "right",
     paddingBottom: 5,
-    lineHeight: 1
+    lineHeight: 1,
+  },
+  commentCount: {
+    width: 50,
+    paddingTop: 5,
+    textAlign: "right",
+    paddingBottom: 5,
+    lineHeight: 1,
+  },
+  commentIcon: {
+    verticalAlign: "middle"
   }
 };
 
@@ -45,7 +62,12 @@ const PostItem = ({ post }) => (
         }
         leftIcon={<Assignment />}
         rightIcon={
-          <FlatButton style={styles.voteScore}>▲ {post.voteScore}</FlatButton>
+          <div style={styles.rightIcon}>
+            <div style={styles.voteScore}>▲ {post.voteScore}</div>
+            <div style={styles.commentCount}>
+              <Comment style={styles.commentIcon}/> {post.commentCount}
+            </div>
+          </div>
         }
       />
     </Card>

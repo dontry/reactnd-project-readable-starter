@@ -49,8 +49,8 @@ export function voteCommentById(id, option) {
     return ax.post(`${ROOT_URL}/comments/${encodeURIComponent(id)}`, {option});
 }
 
-export function updateCommentById(id, {timestamp, body}) {
-    return ax.put(`${ROOT_URL}/comments/${encodeURIComponent(id)}`, {timestamp, body});
+export function updateCommentById(id, comment) {
+    return ax.put(`${ROOT_URL}/comments/${encodeURIComponent(id)}`, {...comment});
 }
 
 export function deleteCommentById(id) {

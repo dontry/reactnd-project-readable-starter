@@ -8,24 +8,45 @@ import AddCommentButtonContainer from "../containers/AddNewButtonContainer";
 
 class PostShow extends Component {
   state = {
-    commentListOpen: false
+    commentListOpen: true,
+    initialLoading: true
+  };
+  componentWillReceiveProps(nextProps) {
+    if (this.state.initialLoading && !nextProps.loading) {
+      this.setState({ initialLoading: false });
+    }
   }
   toggleCommentList = () => {
     this.setState({ commentListOpen: !this.state.commentListOpen });
   };
   render() {
-    const { commentListOpen } = this.state
+    const { commentListOpen, initialLoading } = this.state;
     const postId = this.props.match.params.id;
+
     return (
       <div>
         <NavHeader title="Blog Post" />
-        <PostDetailContainer postId={postId} handleCommentList={this.toggleCommentList.bind(this)} commentListOpen={commentListOpen}/>
-        {commentListOpen && <CommentListContainer postId={postId} />}
-        <AddCommentButtonContainer />
+        <PostDetailContainer
+          postId={postId}
+          handleCommentList={this.toggleCommentList.bind(this)}
+          commentListOpen={commentListOpen}
+        />
+        {!initialLoading && (
+          <div>
+            <AddCommentButtonContainer />
+            {commentListOpen && <CommentListContainer postId={postId} />}
+          </div>
+        )}
         <CommentDialogContainer postId={postId} />
       </div>
     );
   }
 }
 
-export default PostShow;
+function mapStateToProps(state) {
+  return {
+    loading: state.posts.activePost.loading
+  };
+}
+
+export default connect(mapStateToProps, null)(PostShow);

@@ -9,7 +9,7 @@ import {
 import CommentList from "../components/CommentList";
 const mapStateToProps = (state, ownProps) => {
   return {
-    comments: state.comments.commentsList.entity
+    comments: state.comments.commentsList
   };
 };
 

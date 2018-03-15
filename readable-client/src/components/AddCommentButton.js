@@ -7,17 +7,18 @@ const styles = {
   }
 };
 
-class AddCommentButton extends Component {
-  render() {
-    const { openDialog } = this.props;
-    return (
-      <RaisedButton
-        style={styles.button}
-        label={"Add New Comment"}
-        onClick={openDialog}
-      />
-    );
-  }
-}
+const AddCommentButton = props => {
+  const handleOpen = () => {
+    props.openDialog();
+    props.reset();
+  };
+  return (
+    <RaisedButton
+      style={styles.button}
+      label={"Add New Comment"}
+      onClick={handleOpen}
+    />
+  );
+};
 
 export default AddCommentButton;

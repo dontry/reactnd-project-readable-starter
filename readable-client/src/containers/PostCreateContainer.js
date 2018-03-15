@@ -2,11 +2,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { resetNewPost, addPost } from "../actions/posts";
 import PostForm from "../components/PostForm";
+import { fetchCategories } from "../actions/categories";
+
 
 const mapStateToProps = state => {
   return {
-    post: state.posts.newPost.entity,
-    categories: state.categories.categoriesList.entity
+    post: state.posts.newPost,
+    categories: state.categories.categoriesList
   };
 };
 
@@ -17,7 +19,11 @@ const mapDispatchToProps = dispatch => {
     },
     addPost: post => {
       dispatch(addPost(post));
+    },
+    fetchCategories: () => {
+      dispatch(fetchCategories());
     }
+
   };
 };
 

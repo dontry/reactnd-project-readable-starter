@@ -34,8 +34,6 @@ export const RESET_DELETED_POST = "RESET_DELETED_POST";
 //Vote post
 export const REQUEST_VOTE_POST = "REQUEST_VOTE_POST";
 
-
-
 //Fetch posts
 export function fetchPosts() {
   return dispatch => {
@@ -95,11 +93,14 @@ export function resetFetchedPosts() {
 export function fetchPost(id) {
   return dispatch => {
     dispatch(requestFetchPost());
-    return api.getPostById(id).then(res => {
-      !res.error
-        ? dispatch(fetchPostSuccess(res.data))
-        : dispatch(fetchPostsFailure(res.error));
-    });
+    return api
+      .getPostById(id)
+      .then(res => {
+        dispatch(fetchPostSuccess(res.data));
+      })
+      .catch(res => {
+        dispatch(fetchPostFailure(res.response));
+      });
   };
 }
 
@@ -133,11 +134,14 @@ export function resetFetchedPost() {
 export function addPost(post) {
   return dispatch => {
     dispatch(requestAddPost());
-    return api.createPost(post).then(res => {
-      !res.error
-        ? dispatch(addPostSuccess(res.data))
-        : dispatch(addPostFailure(res.error));
-    });
+    return api
+      .createPost(post)
+      .then(res => {
+        dispatch(addPostSuccess(res.data));
+      })
+      .catch(res => {
+        dispatch(addPostFailure(res.error));
+      });
   };
 }
 

@@ -3,6 +3,7 @@ import { Route, Link } from "react-router-dom";
 import Chip from "material-ui/Chip";
 import DropdownMenu from "material-ui/DropDownMenu";
 import MenuItem from "material-ui/MenuItem";
+import Loading from "react-loading";
 
 const styles = {
   chip: {
@@ -10,7 +11,8 @@ const styles = {
   },
   wrapper: {
     display: "flex",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
+    margin: "10px 20px"
   },
   link: {
     textDecoration: "none",
@@ -33,13 +35,13 @@ class CategoryMenu extends Component {
 
   render() {
     const { categories } = this.props;
-    if (!categories) return <div />;
-    const children = this.createChipMenuItems(categories);
-    return (
-      <div style={styles.wrapper}>
-        {children}
-      </div>
-    );
+    if (categories.error) {
+      return <div />;
+    } else if (!categories.entity) {
+      return <div />;
+    }
+    const children = this.createChipMenuItems(categories.entity);
+    return <div style={styles.wrapper}>{children}</div>;
   }
 }
 
