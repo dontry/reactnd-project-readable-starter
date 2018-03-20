@@ -97,7 +97,7 @@ export default function(state = INITIAL_STATE, action) {
     case REQUEST_VOTE_POST:
       return {
         ...state,
-        activePost: { ...state.activePost, loading: false } //loading????
+        activePost: { ...state.activePost, loading: true} //loading????
       };
     case UPDATE_POST_SUCCESS:
       return {
