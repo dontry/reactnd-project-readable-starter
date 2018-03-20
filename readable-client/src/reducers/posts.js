@@ -102,7 +102,7 @@ export default function(state = INITIAL_STATE, action) {
     case UPDATE_POST_SUCCESS:
       return {
         ...state,
-        activePost: { entity: action.payload, error: null, loading: false }
+        activePost: { entity: action.payload, error: null, loading: true }
       };
     case UPDATE_POST_FAILURE:
       return {
