@@ -1,58 +1,59 @@
-import React, { Component } from "react";
+import React  from "react";
+import PropTypes from "prop-types";
 import Dialog from "material-ui/Dialog";
-import RaisedButton from "material-ui/RaisedButton";
-import FlatButton from "material-ui/FlatButton";
-
-const styles = {
-  button: {
-    margin: 5
-  }
-};
-
-const ActionButtonGroup = ({ actionLabel, handleSubmit, handleCancel }) => (
-  <div>
-    <RaisedButton
-      style={styles.button}
-      label={actionLabel}
-      primary={true}
-      onClick={handleSubmit}
-    />
-    <FlatButton
-      style={styles.button}
-      label="Cancel"
-      secondary={true}
-      onClick={handleCancel}
-    />
-  </div>
-);
+import ActionButtonGroup from "./ActionButtonGroup";
 
 const Content = ({ content }) => <h3>{content}</h3>;
 
 const ConfirmationDialog = props => {
   const {
+    title,
+    content,
+    primaryLabel,
+    secondaryLabel,
+    open,
     handleSubmit,
     handleCancel,
-    content,
-    title,
-    actionLabel,
-    open
   } = props;
+
+  const primaryButtonProps = {
+    name: primaryLabel || "Yes",
+    action: handleSubmit,
+    primary: true,
+    isRaised: true
+  };
+
+  const secondaryButtonProps = {
+    name: secondaryLabel || "Cancel",
+    action: handleCancel,
+    primary: false
+  };
+
   return (
     <Dialog
       title={title || ""}
       actions={
         <ActionButtonGroup
-          actionLabel={actionLabel || "Yes"}
-          handleSubmit={handleSubmit}
-          handleCancel={handleCancel}
+          primaryProps={primaryButtonProps}
+          secondaryProps={secondaryButtonProps}
         />
       }
       modal={true}
-      open={open}
+      open={!!open}
     >
       <Content content={content} />
     </Dialog>
   );
 };
+
+
+ConfirmationDialog.propTypes ={
+  title: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
+  primaryLabel: PropTypes.string.isRequired,
+  open: PropTypes.bool.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  handleCancel: PropTypes.func.isRequired
+}
 
 export default ConfirmationDialog;

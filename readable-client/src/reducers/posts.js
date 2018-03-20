@@ -19,9 +19,7 @@ import {
   DELETE_POST_FAILURE,
   DELETE_POST_SUCCESS,
   RESET_DELETED_POST,
-  REQUEST_VOTE_POST,
-  VOTE_POST_SUCCESS,
-  VOTE_POST_FAILURE
+  REQUEST_VOTE_POST
 } from "../actions/posts";
 
 const INITIAL_STATE = {
@@ -37,7 +35,10 @@ export default function(state = INITIAL_STATE, action) {
     //Fetch post list
     case REQUEST_FETCH_POSTS:
     case REQUEST_FETCH_POSTS_BY_CATEGORY:
-      return { ...state, postsList: { entity: [], error: null, loading: true } };
+      return {
+        ...state,
+        postsList: { entity: [], error: null, loading: true }
+      };
     case FETCH_POSTS_SUCCESS:
       return {
         ...state,

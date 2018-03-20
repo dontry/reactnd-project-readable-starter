@@ -1,4 +1,3 @@
-import React, { Commponent } from "react";
 import { connect } from "react-redux";
 import {
   fetchCategories

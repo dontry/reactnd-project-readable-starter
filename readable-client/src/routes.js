@@ -10,6 +10,7 @@ import PostShow from "./pages/PostShow";
 import ErrorPage from "./pages/ErrorPage";
 import Error404 from "./pages/Error404";
 import PostEditor from "./pages/PostEditor";
+import NotificationContainer from "./containers/NotificationContainer";
 import Switch from "react-router-dom/Switch";
 
 const Routes = () => (
@@ -28,6 +29,7 @@ const Routes = () => (
         <Route exact path="/error/:errorCode" component={ErrorPage} />
         <Route component={Error404} />
       </Switch>
+      <NotificationContainer />
     </div>
   </MuiThemeProvider>
 );

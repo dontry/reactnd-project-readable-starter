@@ -16,7 +16,6 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         categoriesList: { entity: [], error: null, loading: true }
       };
-      break;
     case FETCH_CATEGORIES_SUCCESS:
       return {
         ...state,

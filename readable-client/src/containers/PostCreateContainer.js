@@ -1,4 +1,3 @@
-import React, { Component } from "react";
 import { connect } from "react-redux";
 import { resetNewPost, addPost } from "../actions/posts";
 import PostForm from "../components/PostForm";

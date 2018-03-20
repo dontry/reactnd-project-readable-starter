@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from "react";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 import Card from "material-ui/Card";
 import TextField from "material-ui/TextField/TextField";
 import CategoryDropdownMenu from "./CategoryDropdownMenu";
@@ -100,7 +101,7 @@ class PostForm extends Component {
     //TODO
     this.context.router.history.goBack();
   };
-  isCategoryEmpty = (entity=[]) => {
+  isCategoryEmpty = (entity = []) => {
     return !entity || entity.length === 0;
   };
   render() {
@@ -112,9 +113,7 @@ class PostForm extends Component {
     if (post.error) {
       return <Redirect to="/error/404" />;
     } else if (post.loading) {
-      return (
-        <PageLoading />
-      );
+      return <PageLoading />;
     }
 
     const { postEntity } = this.state;
@@ -159,5 +158,18 @@ class PostForm extends Component {
     );
   }
 }
+
+PostForm.propTypes = {
+  post: PropTypes.shape({
+    entity: PropTypes.object,
+    error: PropTypes.string,
+    loading: PropTypes.bool
+  }).isRequired,
+  categories: PropTypes.shape({
+    entity: PropTypes.array,
+    error: PropTypes.string,
+    loading: PropTypes.bool
+  }).isRequired
+};
 
 export default withRouter(PostForm);

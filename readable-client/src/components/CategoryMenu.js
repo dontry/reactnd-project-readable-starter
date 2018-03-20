@@ -1,9 +1,6 @@
 import React, { Component } from "react";
-import { Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Chip from "material-ui/Chip";
-import DropdownMenu from "material-ui/DropDownMenu";
-import MenuItem from "material-ui/MenuItem";
-import Loading from "react-loading";
 
 const styles = {
   chip: {

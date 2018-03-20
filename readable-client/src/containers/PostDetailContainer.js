@@ -1,4 +1,3 @@
-import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
   fetchPost,
@@ -8,7 +7,6 @@ import {
   votePost
 } from "../actions/posts";
 import PostDetail from "../components/PostDetail";
-import { fetchCategories } from "../actions/categories";
 
 const mapStateToProps = (state, ownProps) => {
   return {

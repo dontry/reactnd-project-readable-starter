@@ -1,4 +1,5 @@
-import React, { Component, Fragment } from "react";
+import React, { Fragment } from "react";
+import PropTypes from 'prop-types';
 import TextField from "material-ui/TextField/TextField";
 import { isRequired } from "../utils/validations";
 
@@ -27,5 +28,10 @@ const CommentForm = ({ comment, handleChange }) => {
     </Fragment>
   );
 };
+
+CommentForm.propTypes = {
+  comment: PropTypes.object,
+  handleChange: PropTypes.func.isRequired
+}
 
 export default CommentForm;

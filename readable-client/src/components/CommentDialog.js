@@ -1,16 +1,14 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 import Dialog from "material-ui/Dialog";
-import FlabButton from "material-ui/FlatButton";
-import RaisedButton from "material-ui/RaisedButton";
-import FlatButton from "material-ui/FlatButton/FlatButton";
-import CommentForm from "./CommentForm";
+import Loading from "react-loading";
 import uuid from "uuid";
 import { Redirect } from "react-router-dom";
-import Loading from "react-loading";
+import CommentForm from "./CommentForm";
+import ActionButtonGroup from "./ActionButtonGroup";
 
 const styles = {
   dialog: {
-    width: "100%",
     maxWidth: "none"
   },
   button: {
@@ -28,23 +26,6 @@ const initialComment = postId => ({
   deleted: false,
   parentDeleted: false
 });
-
-const ButtonGroup = ({ handleSubmit, handleCancel }) => (
-  <Fragment>
-    <RaisedButton
-      style={styles.button}
-      label="Submit"
-      primary={true}
-      onClick={handleSubmit}
-    />
-    <FlatButton
-      style={styles.button}
-      label="Cancel"
-      secondary={true}
-      onClick={handleCancel}
-    />
-  </Fragment>
-);
 
 class CommentDialog extends Component {
   state = {
@@ -99,24 +80,44 @@ class CommentDialog extends Component {
       );
     }
 
+    const primaryButtonProps = {
+      name: "Submit",
+      isRaised: true,
+      action: this.handleSubmit,
+      primary: true
+    };
+
+    const secondaryButtonProps = {
+      name: "Cancel",
+      action: this.handleCancel
+    };
+
     const { commentEntity } = this.state;
     return (
       <Dialog
         title="Comment"
         actions={
-          <ButtonGroup
-            handleSubmit={this.handleSubmit.bind(this)}
-            handleCancel={this.handleCancel.bind(this)}
+          <ActionButtonGroup
+            primaryProps={primaryButtonProps}
+            secondaryProps={secondaryButtonProps}
           />
         }
         modal={true}
         contentStyle={styles.dialog}
-        open={open}
+        open={!!open}
       >
         <CommentForm comment={commentEntity} handleChange={this.handleChange} />
       </Dialog>
     );
   }
 }
+
+CommentDialog.propTypes = {
+  comment: PropTypes.object,
+  open: PropTypes.bool,
+  addComment: PropTypes.func,
+  updateComment: PropTypes.func,
+  closeDialog: PropTypes.func
+};
 
 export default CommentDialog;

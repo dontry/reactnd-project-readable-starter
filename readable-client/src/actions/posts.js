@@ -38,11 +38,14 @@ export const REQUEST_VOTE_POST = "REQUEST_VOTE_POST";
 export function fetchPosts() {
   return dispatch => {
     dispatch(requestFetchPosts());
-    return api.getPosts().then(res => {
-      !res.error
-        ? dispatch(fetchPostsSuccess(res.data))
-        : dispatch(fetchPostsFailure(res.error));
-    });
+    return api
+      .getPosts()
+      .then(res => {
+        dispatch(fetchPostsSuccess(res.data));
+      })
+      .catch(res => {
+        dispatch(fetchPostsFailure(res.error));
+      });
   };
 }
 
@@ -55,11 +58,14 @@ function requestFetchPosts() {
 export function fetchPostsByCategory(category) {
   return dispatch => {
     dispatch(requestFetchPostsByCategory());
-    return api.getPostsByCategory(category).then(res => {
-      !res.error
-        ? dispatch(fetchPostsSuccess(res.data))
-        : dispatch(fetchPostsFailure(res.error));
-    });
+    return api
+      .getPostsByCategory(category)
+      .then(res => {
+        dispatch(fetchPostsSuccess(res.data));
+      })
+      .catch(res => {
+        dispatch(fetchPostsFailure(res.error));
+      });
   };
 }
 
@@ -96,6 +102,11 @@ export function fetchPost(id) {
     return api
       .getPostById(id)
       .then(res => {
+        if (isEmptyObject(res.data)) {
+          throw {
+            response: "The post does not exist."
+          };
+        }
         dispatch(fetchPostSuccess(res.data));
       })
       .catch(res => {
@@ -175,11 +186,14 @@ export function resetNewPost() {
 export function updatePost(id, post) {
   return dispatch => {
     dispatch(requestUpdatePost());
-    return api.updatePostById(id, post).then(res => {
-      !res.error
-        ? dispatch(updatePostSuccess(res.data))
-        : dispatch(updatePostFailure(res.error));
-    });
+    return api
+      .updatePostById(id, post)
+      .then(res => {
+        dispatch(updatePostSuccess(res.data));
+      })
+      .catch(res => {
+        dispatch(updatePostFailure(res.error));
+      });
   };
 }
 
@@ -191,11 +205,14 @@ function requestUpdatePost() {
 export function votePost(id, option) {
   return dispatch => {
     dispatch(requestVotePost());
-    return api.votePostById(id, option).then(res => {
-      !res.error
-        ? dispatch(updatePostSuccess(res.data))
-        : dispatch(updatePostFailure(res.error));
-    });
+    return api
+      .votePostById(id, option)
+      .then(res => {
+        dispatch(updatePostSuccess(res.data));
+      })
+      .catch(res => {
+        dispatch(updatePostFailure(res.error));
+      });
   };
 }
 
@@ -223,11 +240,14 @@ function updatePostFailure(error) {
 export function deletePost(id) {
   return dispatch => {
     dispatch(requestDeletePost());
-    return api.deletePostById(id).then(res => {
-      !res.error
-        ? dispatch(deletePostSuccess(res.data))
-        : dispatch(deletePostFailure(res.error));
-    });
+    return api
+      .deletePostById(id)
+      .then(res => {
+        dispatch(deletePostSuccess(res.data));
+      })
+      .catch(res => {
+        dispatch(deletePostFailure(res.error));
+      });
   };
 }
 
@@ -255,4 +275,8 @@ export function resetDeletedPost() {
   return {
     type: RESET_DELETED_POST
   };
+}
+
+function isEmptyObject(obj) {
+  return Object.keys(obj).length === 0 && obj.constructor === Object;
 }

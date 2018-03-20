@@ -4,29 +4,12 @@ import { List } from "material-ui/List";
 import SortButtonGroup from "./SortButtonGroup";
 import { Redirect } from "react-router-dom";
 import PageLoading from "./PageLoading";
-
-const SORT_VOTESCORE = 1;
-const SORT_TIMESTAMP = 2;
-
-const styles = {
-  heading: {
-    padding: "0 20px"
-  }
-};
-
-const sortOptions = [
-  {
-    value: SORT_VOTESCORE,
-    text: "Sort by vote"
-  },
-  {
-    value: SORT_TIMESTAMP,
-    text: "Sort by time"
-  }
-];
-
-const sortVotescore = (a, b) => a.voteScore < b.voteScore;
-const sortTimestamp = (a, b) => a.timestamp < b.timestamp;
+import {
+  SORT_VOTESCORE,
+  SORT_OPTIONS,
+  sortVotescore,
+  sortTimestamp
+} from "../utils/sort";
 
 class PostsList extends Component {
   state = {
@@ -66,9 +49,7 @@ class PostsList extends Component {
     if (posts.error) {
       return <Redirect to="/error/404" />;
     } else if (posts.loading) {
-      return (
-        <PageLoading />
-      );
+      return <PageLoading />;
     }
 
     const { selectedSortMethod } = this.state;
@@ -78,7 +59,7 @@ class PostsList extends Component {
         <SortButtonGroup
           onChange={this.handleChanger}
           defaultValue={selectedSortMethod}
-          options={sortOptions}
+          options={SORT_OPTIONS}
         />
         <List>{PostItems}</List>
       </div>

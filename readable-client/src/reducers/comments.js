@@ -15,7 +15,6 @@ import {
   DELETE_COMMENT_SUCCESS,
   OPEN_COMMENT_DIALOG,
   CLOSE_COMMENT_DIALOG,
-  updateComment
 } from "../actions/comments";
 
 const INITIAL_STATE = {
@@ -64,8 +63,6 @@ export default function(state = INITIAL_STATE, action) {
         newComment: { entity: null, error: null, loading: true }
       };
     case ADD_COMMENT_SUCCESS:
-      let currentComentlist = state.commentsList.entity;
-      // currentComentlist.push(action.payload);
       return {
         ...state,
         commentsList: {

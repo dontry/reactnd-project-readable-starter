@@ -1,45 +1,20 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Card, CardHeader, CardText } from "material-ui/Card";
-import SubtitleComponent from "./SutitleComponent";
+import SubtitleComponent from "./SubtitleComponent";
 import CardActions from "material-ui/Card/CardActions";
 import VoteButtonGroup from "./VoteButtonGroup";
-import FlatButton from "material-ui/FlatButton";
+import ActionButtonGroup from "./ActionButtonGroup";
 
 const styles = {
-  wrapper: {
+  buttonWrapper: {
     float: "right"
-  },
-  button: {
-    marginLeft: 5,
-    marginRight: 5
   }
-};
-
-const ButtonGroup = ({ comment, handleEdit, handleDelete }) => {
-  return (
-    <span style={styles.wrapper}>
-      <FlatButton
-        style={styles.button}
-        primary={true}
-        label="Edit"
-        style={styles.button}
-        onClick={handleEdit}
-      />
-      <FlatButton
-        style={styles.button}
-        secondary={true}
-        label="Delete"
-        style={styles.button}
-        onClick={handleDelete}
-      />
-    </span>
-  );
 };
 
 const CommentItem = props => {
   const handleVote = option => () => {
-    props.handleVoteComment &&
-      props.handleVoteComment(props.comment.id, option);
+    props.handleCommentVote(props.comment.id, option);
   };
 
   const handleEdit = commentId => () => {
@@ -53,6 +28,15 @@ const CommentItem = props => {
 
   const { comment } = props;
   const currentDate = new Date(comment.timestamp);
+  const primaryButtonProps = {
+    name: "Edit",
+    action: handleEdit(comment.id),
+    primary: true
+  };
+  const secondaryButtonProps = {
+    name: "Delete",
+    action: handleDelete(comment.id)
+  };
   return (
     <Card>
       <CardHeader
@@ -65,14 +49,26 @@ const CommentItem = props => {
           voteScore={comment.voteScore}
           handleVote={handleVote}
         />
-        <ButtonGroup
-          comment={comment}
-          handleDelete={handleDelete(comment.id)}
-          handleEdit={handleEdit(comment.id)}
+        <ActionButtonGroup
+          style={styles.buttonWrapper}
+          primaryProps={primaryButtonProps}
+          secondaryProps={secondaryButtonProps}
         />
       </CardActions>
     </Card>
   );
+};
+
+CommentItem.propTypes = {
+  comment: PropTypes.shape({
+    id: PropTypes.string,
+    author: PropTypes.string,
+    body: PropTypes.string,
+    voteScore: PropTypes.number
+  }).isRequired,
+  handleCommentVote: PropTypes.func.isRequired,
+  handleDialog: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired
 };
 
 export default CommentItem;

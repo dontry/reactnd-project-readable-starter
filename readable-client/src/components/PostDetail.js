@@ -1,16 +1,15 @@
-import React, { Component, PropTypes } from "react";
+import React, { Component } from "react";
 import { Card, CardActions, CardHeader, CardText } from "material-ui/Card";
 import FlatButton from "material-ui/FlatButton";
-import RaisedButton from "material-ui/RaisedButton";
 import Chip from "material-ui/Chip";
 import Comment from "material-ui/svg-icons/communication/comment";
-import SubtitleComponent from "./SutitleComponent";
+import SubtitleComponent from "./SubtitleComponent";
 import VoteButtonGroup from "./VoteButtonGroup";
 import ConfirmationDialog from "./ConfirmationDialog";
 import { Link, Redirect } from "react-router-dom";
 import { grey400, grey600 } from "material-ui/styles/colors";
-import Loading from "react-loading";
 import PageLoading from "./PageLoading";
+import ActionButtonGroup from "./ActionButtonGroup";
 
 const styles = {
   card: {
@@ -22,12 +21,18 @@ const styles = {
     marginLeft: 10,
     backgroundColor: "#47d8ea"
   },
-  wrapper: {
+  buttonWrapper: {
     float: "right"
   },
   button: {
-    marginLeft: 5,
-    marginRight: 5
+    position: "relative"
+  },
+  primaryLink: {
+    display: "inline-block",
+    position: "absolute",
+    width: 88,
+    height: 36,
+    left: -28 
   }
 };
 const Title = ({ title }) => {
@@ -47,21 +52,7 @@ const Subtitle = ({ author, timestamp, category }) => {
   );
 };
 
-const Body = ({ body }) => <CardText expandable={false}>{body}</CardText>;
-
-const ButtonGroup = ({ id, handleDelete }) => (
-  <span style={styles.wrapper}>
-    <Link to={`/posts/${encodeURIComponent(id)}/edit`}>
-      <RaisedButton style={styles.button} label="Edit" primary={true} />
-    </Link>
-    <FlatButton
-      style={styles.button}
-      label="Delete"
-      secondary={true}
-      onClick={handleDelete}
-    />
-  </span>
-);
+const PostBody = ({ body }) => <CardText expandable={false}>{body}</CardText>;
 
 class PostDetail extends Component {
   static contextTypes = {
@@ -89,7 +80,7 @@ class PostDetail extends Component {
     this.props.votePost && this.props.votePost(this.props.postId, option);
   };
 
-  handleOpenDialog = () => {
+  handleDeleteDialog = () => {
     this.setState({ open: true });
   };
 
@@ -103,18 +94,36 @@ class PostDetail extends Component {
 
   render() {
     const { post, handleCommentList, commentListOpen } = this.props;
-    const { open, shouldLoading } = this.state;
+    const { open } = this.state;
 
     if (post.error) {
       return <Redirect to="/error/404" />;
     } else if (post.loading) {
-      return (
-        // <Loading delay={200} type="spin" color="#222" className="loading" />
-        <PageLoading />
-      );
+      return <PageLoading />;
     } else if (!post.entity) {
       return <div />;
     }
+
+    const postIdURL = encodeURIComponent(post.entity.id);
+    const primaryButtonProps = {
+      style: styles.button,
+      name: (
+        <Link style={styles.primaryLink} to={`/posts/${postIdURL}/edit`}>
+          Edit
+        </Link>
+      ),
+      className: 'link-btn',
+      isRaised: true,
+      aciton: e => {
+        e.preventDefault();
+      },
+      primary: true
+    };
+
+    const secondaryButtonProps = {
+      name: "Delete",
+      action: this.handleDeleteDialog
+    };
 
     return (
       <div>
@@ -131,7 +140,7 @@ class PostDetail extends Component {
             actAsExpander={false}
             showExpandableButton={false}
           />
-          <Body body={post.entity.body} />
+          <PostBody body={post.entity.body} />
           <CardActions>
             <VoteButtonGroup
               isRaised
@@ -149,18 +158,21 @@ class PostDetail extends Component {
               onClick={handleCommentList}
               // label={!!post.commentCount ? post.commentCount : "0"}
             />
-            <ButtonGroup
-              id={post.entity.id}
-              handleDelete={this.handleOpenDialog.bind(this)}
+            <ActionButtonGroup
+              style={styles.buttonWrapper}
+              primaryProps={primaryButtonProps}
+              secondaryProps={secondaryButtonProps}
             />
           </CardActions>
         </Card>
         <ConfirmationDialog
           title="Delete the post"
           content="Are you sure to delete this blog post?"
+          primaryLabel="Yes"
+          secondaryLabel="Cancel"
           handleSubmit={this.handleSubmit.bind(this)}
           handleCancel={this.handleCancel.bind(this)}
-          open={open}
+          open={!!open}
         />
       </div>
     );

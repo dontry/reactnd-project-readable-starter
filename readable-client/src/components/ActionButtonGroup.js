@@ -1,51 +1,79 @@
-import React, { Component, Fragment } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 import RaisedButton from "material-ui/RaisedButton";
 import FlatButton from "material-ui/FlatButton";
 
 const styles = {
   button: {
-    margin: 5
+    marginLeft: 5,
+    marginRight: 5
   }
 };
 
 const initialiseProps = props => ({
-    style: {...props.style},
-    name: props.name || '',
-    action: props.action || function(){},
-    primary: props.primary || false 
-})
+  style: { ...styles.button, ...props.style },
+  name: props.name,
+  className: props.className || "",
+  isRaised: !!props.isRaised,
+  action: props.action || function() {},
+  primary: !!props.primary
+});
 
 const createButton = props => {
   const newProps = initialiseProps(props);
   if (newProps.isRaised) {
     return (
       <RaisedButton
-        style={{ ...styles.button, ...newProps.style }}
+        className={newProps.className}
+        style={newProps.style}
         label={newProps.name}
-        primary={true}
+        primary={newProps.primary}
+        secondary={!newProps.primary}
         onClick={newProps.action}
       />
     );
   } else {
-    <FlatButton
-      style={{ ...styles.button, ...newProps.style }}
-      label="Cancel"
-      secondary={true}
-      onClick={{ ...newProps.style }}
-    />;
+    return (
+      <FlatButton
+        className={newProps.className}
+        style={newProps.style}
+        label={newProps.name}
+        primary={newProps.primary}
+        secondary={!newProps.primary}
+        onClick={newProps.action}
+      />
+    );
   }
 };
 
-const ActionButtonGroup = ({ primaryButtonProps, secondaryButtonProps }) => {
-  const PrimaryButton = createButton(primaryButtonProps);
-  const SecondaryButton = createButton(secondaryButtonProps);
+const ActionButtonGroup = ({ style, primaryProps, secondaryProps }) => {
+  const PrimaryButton = createButton(primaryProps);
+  const SecondaryButton = createButton(secondaryProps);
 
   return (
-    <Fragment>
-      <PrimaryButton />
-      <SecondaryButton />>
-    </Fragment>
+    <div style={style}>
+      {PrimaryButton}
+      {SecondaryButton}
+    </div>
   );
+};
+
+ActionButtonGroup.propTypes = {
+  style: PropTypes.object,
+  primaryProps: PropTypes.shape({
+    className: PropTypes.string,
+    style: PropTypes.object,
+    label: PropTypes.oneOf([PropTypes.string, PropTypes.element]),
+    primary: PropTypes.bool,
+    onClick: PropTypes.func
+  }),
+  secondaryProps: PropTypes.shape({
+    className: PropTypes.string,
+    style: PropTypes.object,
+    label: PropTypes.oneOf([PropTypes.string, PropTypes.element]),
+    primary: PropTypes.bool,
+    onClick: PropTypes.func
+  })
 };
 
 export default ActionButtonGroup;
