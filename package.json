@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "cd readable-client && concurrently \"npm start\" \"npm run server\"",
-    "postinstall": "cd readable-client && npm install"
+    "postinstall": "cd readable-client && npm install  && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "repository": {
     "type": "git",
