@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "cd readable-client && concurrently \"npm start\" \"npm run server\"",
-    "heroku-postbuild": "cd readable-client && npm install --only=dev --no-shrinkwrap"  },
+    "heroku-postbuild": "cd readable-client && npm install --only=dev --no-shrinkwrap && npm start"  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/udacity/reactnd-project-readable-starter.git"
