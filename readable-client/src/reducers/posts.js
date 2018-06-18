@@ -19,13 +19,13 @@ import {
   DELETE_POST_FAILURE,
   DELETE_POST_SUCCESS,
   RESET_DELETED_POST,
-  REQUEST_VOTE_POST
+  REQUEST_VOTE_POST,
 } from "../actions/posts";
 
 const INITIAL_STATE = {
   postsList: { entity: [], error: null, loading: false },
   newPost: { entity: null, error: null, loading: false },
-  activePost: { entity: null, error: null, loading: false },
+  activePost: { entity: null, error: null, loading: false, vote_loading: false },
   deletedPost: { entity: null, error: null, loading: false }
 };
 
@@ -97,17 +97,17 @@ export default function(state = INITIAL_STATE, action) {
     case REQUEST_VOTE_POST:
       return {
         ...state,
-        activePost: { ...state.activePost, loading: true} //loading????
+        activePost: { ...state.activePost, vote_loading: true} //loading????
       };
     case UPDATE_POST_SUCCESS:
       return {
         ...state,
-        activePost: { entity: action.payload, error: null, loading: true }
+        activePost: { entity: action.payload, error: null, vote_loading: false }
       };
     case UPDATE_POST_FAILURE:
       return {
         ...state,
-        activePost: { entity: null, error: null, loading: false }
+        activePost: { entity: null, error: null, vote_loading: false }
       };
     //Delete a post
     case REQUEST_DELETE_POST:

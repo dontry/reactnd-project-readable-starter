@@ -5,7 +5,7 @@ import FlatButton from "material-ui/FlatButton";
 const raisedStyle = { marginRight: 8 };
 const flatStyle = { marginRight: 8, paddingLeft: 0, paddingRight: 0 };
 
-const UpvoteButton = ({ isRaised, voteScore, handleClick }) => {
+const UpvoteButton = ({ isRaised, voteScore, handleClick, loading }) => {
   return isRaised ? (
     <RaisedButton
       style={raisedStyle}
@@ -16,7 +16,7 @@ const UpvoteButton = ({ isRaised, voteScore, handleClick }) => {
   ) : (
     <FlatButton
       style={flatStyle}
-      label={`▲ ${voteScore}`}
+      label={`▲ ${loading ? "-" : voteScore }`}
       onClick={handleClick}
     />
   );
@@ -35,7 +35,7 @@ const DownvoteButton = ({ isRaised, handleClick }) => {
   );
 };
 
-const VoteButtonGroup = ({ isRaised = false, voteScore, handleVote }) => {
+const VoteButtonGroup = ({ isRaised = false, loading = false, voteScore, handleVote }) => {
   const upVote = handleVote("upVote");
   const downVote = handleVote("downVote");
   return (
@@ -44,6 +44,7 @@ const VoteButtonGroup = ({ isRaised = false, voteScore, handleVote }) => {
         isRaised={isRaised}
         voteScore={voteScore}
         handleClick={upVote}
+        loading={loading}
       />
       <DownvoteButton isRaised={isRaised} handleClick={downVote} />
     </span>

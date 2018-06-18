@@ -146,6 +146,7 @@ class PostDetail extends Component {
               isRaised
               voteScore={post.entity.voteScore}
               handleVote={this.handleVote.bind(this)}
+              loading={post.vote_loading}
             />
             <FlatButton
               icon={
