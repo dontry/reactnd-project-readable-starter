@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const HEADERS = { headers: { 'Authorization': "udacity" } };
-const ROOT_URL = "http://localhost:3001";
+const ROOT_URL = process.env.NODE_ENV === "production" ? "https://react-blogpost-server-2018.herokuapp.com/" : "http://localhost:3001";
 const ax = axios.create(HEADERS)
 
 export function getCategories() {
