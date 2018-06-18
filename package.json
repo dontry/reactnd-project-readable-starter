@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "cd readable-client && concurrently \"npm start\" \"npm run server\"",
-    "postinstall": "cd readble-client && npm install"
+    "postinstall": "cd readable-client && npm install"
   },
   "repository": {
     "type": "git",
