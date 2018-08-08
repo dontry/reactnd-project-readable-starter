@@ -29,28 +29,27 @@ const initialComment = postId => ({
 
 class CommentDialog extends Component {
   state = {
-    commentEntity:
-      this.props.comment.entity || initialComment(this.props.postId),
-    isCreate: !this.props.comment.entity
+    comment: this.props.comment || initialComment(this.props.postId),
+    isCreate: !this.props.comment
   };
 
   componentWillReceiveProps(nextProps) {
-    const activeCommentEntity =
-      nextProps.comment.entity || initialComment(this.props.postId);
+    const activeComment =
+      nextProps.comment || initialComment(this.props.postId);
     this.setState({
-      commentEntity: activeCommentEntity,
-      isCreate: !nextProps.comment.entity
+      comment: activeComment,
+      isCreate: !nextProps.comment
     });
   }
 
   handleSubmit = () => {
-    const { commentEntity } = this.state;
+    const { comment } = this.state;
     this.props.closeDialog();
     if (this.state.isCreate) {
-      this.props.addComment({ ...commentEntity, timestamp: Date.now() });
+      this.props.addComment({ ...comment, timestamp: Date.now() });
     } else {
-      this.props.updateComment(commentEntity.id, {
-        ...commentEntity,
+      this.props.updateComment(comment.id, {
+        ...comment,
         timestamp: Date.now()
       });
     }
@@ -58,8 +57,8 @@ class CommentDialog extends Component {
 
   handleChange = fieldName => event => {
     this.setState({
-      commentEntity: {
-        ...this.state.commentEntity,
+      comment: {
+        ...this.state.comment,
         [fieldName]: event.target.value
       }
     });
@@ -71,10 +70,10 @@ class CommentDialog extends Component {
   };
 
   render() {
-    const { comment, open } = this.props;
-    if (comment.error) {
+    const { open, error, loading } = this.props;
+    if (error) {
       return <Redirect to="/error/404" />;
-    } else if (comment.loading) {
+    } else if (loading) {
       return (
         <Loading delay={200} type="spin" color="#222" className="loading" />
       );
@@ -92,7 +91,8 @@ class CommentDialog extends Component {
       action: this.handleCancel
     };
 
-    const { commentEntity } = this.state;
+    const { comment } = this.state;
+
     return (
       <Dialog
         title="Comment"
@@ -106,15 +106,18 @@ class CommentDialog extends Component {
         contentStyle={styles.dialog}
         open={!!open}
       >
-        <CommentForm comment={commentEntity} handleChange={this.handleChange} />
+        <CommentForm comment={comment} handleChange={this.handleChange} />
       </Dialog>
     );
   }
 }
 
 CommentDialog.propTypes = {
-  comment: PropTypes.object,
-  open: PropTypes.bool,
+  postId: PropTypes.string.isRequired,
+  comment: PropTypes.object.isRequired,
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.string.isRequired,
+  open: PropTypes.bool.isRequired,
   addComment: PropTypes.func,
   updateComment: PropTypes.func,
   closeDialog: PropTypes.func

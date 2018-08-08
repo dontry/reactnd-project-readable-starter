@@ -32,7 +32,7 @@ const styles = {
     position: "absolute",
     width: 88,
     height: 36,
-    left: -28 
+    left: -28
   }
 };
 const Title = ({ title }) => {
@@ -93,18 +93,18 @@ class PostDetail extends Component {
   };
 
   render() {
-    const { post, handleCommentList, commentListOpen } = this.props;
+    const { post, handleCommentList, commentListOpen, error, loading } = this.props;
     const { open } = this.state;
 
-    if (post.error) {
+    if (error) {
       return <Redirect to="/error/404" />;
-    } else if (post.loading) {
+    } else if (loading) {
       return <PageLoading />;
-    } else if (!post.entity) {
+    } else if (!post) {
       return <div />;
     }
 
-    const postIdURL = encodeURIComponent(post.entity.id);
+    const postIdURL = encodeURIComponent(post.id);
     const primaryButtonProps = {
       style: styles.button,
       name: (
@@ -112,7 +112,7 @@ class PostDetail extends Component {
           Edit
         </Link>
       ),
-      className: 'link-btn',
+      className: "link-btn",
       isRaised: true,
       aciton: e => {
         e.preventDefault();
@@ -129,23 +129,23 @@ class PostDetail extends Component {
       <div>
         <Card style={styles.card}>
           <CardHeader
-            title={<Title title={post.entity.title} />}
+            title={<Title title={post.title} />}
             subtitle={
               <Subtitle
-                author={post.entity.author}
-                timestamp={post.entity.timestamp}
-                category={post.entity.category}
+                author={post.author}
+                timestamp={post.timestamp}
+                category={post.category}
               />
             }
             actAsExpander={false}
             showExpandableButton={false}
           />
-          <PostBody body={post.entity.body} />
+          <PostBody body={post.body} />
           <CardActions>
             <VoteButtonGroup
               isRaised
-              voteScore={post.entity.voteScore}
-              handleVote={this.handleVote.bind(this)}
+              voteScore={post.voteScore}
+              handleVote={this.handleVote}
               loading={post.vote_loading}
             />
             <FlatButton
@@ -171,8 +171,8 @@ class PostDetail extends Component {
           content="Are you sure to delete this blog post?"
           primaryLabel="Yes"
           secondaryLabel="Cancel"
-          handleSubmit={this.handleSubmit.bind(this)}
-          handleCancel={this.handleCancel.bind(this)}
+          handleSubmit={this.handleSubmit}
+          handleCancel={this.handleCancel}
           open={!!open}
         />
       </div>

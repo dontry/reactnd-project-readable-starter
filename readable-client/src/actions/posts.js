@@ -1,11 +1,14 @@
+import * as schema from "./schema";
+import { normalize } from "normalizr";
 import * as api from "../utils/api";
+import { getIsLoading } from "../reducers/post";
 //Get posts
 export const REQUEST_FETCH_POSTS = "REQUEST_FETCH_POSTS";
 export const REQUEST_FETCH_POSTS_BY_CATEGORY =
   "REQUEST_FETCH_POSTS_BY_CATEGORY";
 export const FETCH_POSTS_SUCCESS = "FETCH_POSTS_SUCCESS";
 export const FETCH_POSTS_FAILURE = "FETCH_POSTS_FAILURE";
-export const RESET_FETCHED_POSTS = "RESET_FETCHED_POSTS";
+export const RESET_POSTS = "RESET_POSTS";
 
 //Get post
 export const REQUEST_FETCH_POST = "REQUEST_FETCH_POST";
@@ -36,16 +39,18 @@ export const REQUEST_VOTE_POST = "REQUEST_VOTE_POST";
 
 //Fetch posts
 export function fetchPosts() {
-  return dispatch => {
+  return (dispatch, getState) => {
+    //Avoid racing condition
+    // if (getIsLoading(getState())) {
+    // return Promise.resolve();
+    // }
     dispatch(requestFetchPosts());
-    return api
-      .getPosts()
-      .then(res => {
-        dispatch(fetchPostsSuccess(res.data));
-      })
-      .catch(res => {
-        dispatch(fetchPostsFailure(res.error));
-      });
+    return api.getPosts().then(
+      res => {
+        dispatch(fetchPostsSuccess(normalize(res.data, schema.arrayOfPosts)));
+      },
+      res => dispatch(fetchPostsFailure(res.error))
+    );
   };
 }
 
@@ -56,16 +61,18 @@ function requestFetchPosts() {
 }
 
 export function fetchPostsByCategory(category) {
-  return dispatch => {
+  return (dispatch, getState) => {
+    //Avoid racing condition
+    // if (getIsLoading(getState())) {
+    // return Promise.resolve();
+    // }
     dispatch(requestFetchPostsByCategory());
-    return api
-      .getPostsByCategory(category)
-      .then(res => {
-        dispatch(fetchPostsSuccess(res.data));
-      })
-      .catch(res => {
-        dispatch(fetchPostsFailure(res.error));
-      });
+    return api.getPostsByCategory(category).then(
+      res => {
+        dispatch(fetchPostsSuccess(normalize(res.data, schema.arrayOfPosts)));
+      },
+      res => dispatch(fetchPostsFailure(res.error))
+    );
   };
 }
 
@@ -82,7 +89,7 @@ function fetchPostsSuccess(posts) {
   };
 }
 
-function fetchPostsFailure(error) {
+function fetchPostsFailure(error = "Something goes wrong when fetching posts") {
   return {
     type: FETCH_POSTS_FAILURE,
     payload: error
@@ -91,7 +98,7 @@ function fetchPostsFailure(error) {
 
 export function resetFetchedPosts() {
   return {
-    type: RESET_FETCHED_POSTS
+    type: RESET_POSTS
   };
 }
 
@@ -99,19 +106,17 @@ export function resetFetchedPosts() {
 export function fetchPost(id) {
   return dispatch => {
     dispatch(requestFetchPost());
-    return api
-      .getPostById(id)
-      .then(res => {
+    return api.getPostById(id).then(
+      res => {
         if (isEmptyObject(res.data)) {
           throw {
-            response: "The post does not exist."
+            error: "The post does not exist."
           };
         }
-        dispatch(fetchPostSuccess(res.data));
-      })
-      .catch(res => {
-        dispatch(fetchPostFailure(res.response));
-      });
+        dispatch(fetchPostSuccess(normalize(res.data, schema.post)));
+      },
+      res => dispatch(fetchPostFailure(res.error))
+    );
   };
 }
 
@@ -128,7 +133,9 @@ function fetchPostSuccess(post) {
   };
 }
 
-function fetchPostFailure(error) {
+function fetchPostFailure(
+  error = "Something went wrong when fetching the post"
+) {
   return {
     type: FETCH_POST_FAILURE,
     payload: error
@@ -148,7 +155,9 @@ export function addPost(post) {
     return api
       .createPost(post)
       .then(res => {
-        dispatch(addPostSuccess(res.data));
+        console.log("Normalized:");
+        console.dir(normalize(res.data, schema.post));
+        dispatch(addPostSuccess(normalize(res.data, schema.post)));
       })
       .catch(res => {
         dispatch(addPostFailure(res.error));
@@ -169,7 +178,7 @@ function addPostSuccess(post) {
   };
 }
 
-function addPostFailure(error) {
+function addPostFailure(error = "Something went wrong when adding the post") {
   return {
     type: ADD_POST_FAILURE,
     payload: error
@@ -186,14 +195,14 @@ export function resetNewPost() {
 export function updatePost(id, post) {
   return dispatch => {
     dispatch(requestUpdatePost());
-    return api
-      .updatePostById(id, post)
-      .then(res => {
+    return api.updatePostById(id, post).then(
+      res => {
+        console.log("Normalized:");
+        console.dir(normalize(res.data, schema.post));
         dispatch(updatePostSuccess(res.data));
-      })
-      .catch(res => {
-        dispatch(updatePostFailure(res.error));
-      });
+      },
+      res => dispatch(updatePostFailure(res.error))
+    );
   };
 }
 
@@ -205,14 +214,12 @@ function requestUpdatePost() {
 export function votePost(id, option) {
   return dispatch => {
     dispatch(requestVotePost());
-    return api
-      .votePostById(id, option)
-      .then(res => {
-        dispatch(updatePostSuccess(res.data));
-      })
-      .catch(res => {
-        dispatch(updatePostFailure(res.error));
-      });
+    return api.votePostById(id, option).then(
+      res => {
+        dispatch(updatePostSuccess(normalize(res.data, schema.post)));
+      },
+      res => dispatch(updatePostFailure(res.error))
+    );
   };
 }
 
@@ -229,7 +236,9 @@ function updatePostSuccess(post) {
   };
 }
 
-function updatePostFailure(error) {
+function updatePostFailure(
+  error = "Something went wrong when updating the post"
+) {
   return {
     type: UPDATE_POST_FAILURE,
     payload: error
@@ -240,14 +249,14 @@ function updatePostFailure(error) {
 export function deletePost(id) {
   return dispatch => {
     dispatch(requestDeletePost());
-    return api
-      .deletePostById(id)
-      .then(res => {
+    return api.deletePostById(id).then(
+      res => {
+        console.log("Normalized:");
+        console.dir(normalize(res.data, schema.post));
         dispatch(deletePostSuccess(res.data));
-      })
-      .catch(res => {
-        dispatch(deletePostFailure(res.error));
-      });
+      },
+      res => dispatch(deletePostFailure(res.error))
+    );
   };
 }
 
@@ -264,7 +273,9 @@ export function deletePostSuccess(post) {
   };
 }
 
-export function deletePostFailure(error) {
+export function deletePostFailure(
+  error = "Something went wrong when deleting the post"
+) {
   return {
     type: DELETE_POST_FAILURE,
     payload: error

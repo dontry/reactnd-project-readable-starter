@@ -2,12 +2,14 @@ import { connect } from "react-redux";
 import { resetNewPost, addPost } from "../actions/posts";
 import PostForm from "../components/PostForm";
 import { fetchCategories } from "../actions/categories";
+import { getError, getIsLoading } from "../reducers/post";
 
 
 const mapStateToProps = state => {
   return {
-    post: state.posts.newPost,
-    categories: state.categories.categoriesList
+    loading: getIsLoading(state.posts),
+    error: getError(state.posts),
+    categories: state.categories.list
   };
 };
 

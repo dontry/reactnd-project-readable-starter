@@ -5,6 +5,7 @@ import PostDetailContainer from "../containers/PostDetailContainer";
 import CommentListContainer from "../containers/CommentListContainer";
 import CommentDialogContainer from "../containers/CommentDialogContainer";
 import AddCommentButtonContainer from "../containers/AddNewButtonContainer";
+import { getIsLoading } from "../reducers/post";
 
 class PostShow extends Component {
   state = {
@@ -45,8 +46,11 @@ class PostShow extends Component {
 
 function mapStateToProps(state) {
   return {
-    loading: state.posts.activePost.loading
+    loading: getIsLoading(state.posts)
   };
 }
 
-export default connect(mapStateToProps, null)(PostShow);
+export default connect(
+  mapStateToProps,
+  null
+)(PostShow);

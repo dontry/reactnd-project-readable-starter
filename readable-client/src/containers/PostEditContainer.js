@@ -2,11 +2,14 @@ import { connect } from "react-redux";
 import { updatePost } from "../actions/posts";
 import PostForm from "../components/PostForm";
 import { fetchCategories } from "../actions/categories";
+import { getPostById, getIsLoading, getError } from "../reducers/post";
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
   return {
-    post: state.posts.activePost,
-    categories: state.categories.categoriesList
+    post: getPostById(state.posts, ownProps.id),
+    loading: getIsLoading(state.posts),
+    error: getError(state.posts),
+    categories: state.categories.list
   };
 };
 
@@ -21,4 +24,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostForm);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PostForm);
