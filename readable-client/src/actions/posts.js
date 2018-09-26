@@ -49,7 +49,7 @@ export function fetchPosts() {
       res => {
         dispatch(fetchPostsSuccess(normalize(res.data, schema.arrayOfPosts)));
       },
-      res => dispatch(fetchPostsFailure(res.error))
+      error => dispatch(fetchPostsFailure(error.message))
     );
   };
 }
@@ -71,7 +71,7 @@ export function fetchPostsByCategory(category) {
       res => {
         dispatch(fetchPostsSuccess(normalize(res.data, schema.arrayOfPosts)));
       },
-      res => dispatch(fetchPostsFailure(res.error))
+      error => dispatch(fetchPostsFailure(error.message))
     );
   };
 }
@@ -115,7 +115,7 @@ export function fetchPost(id) {
         }
         dispatch(fetchPostSuccess(normalize(res.data, schema.post)));
       },
-      res => dispatch(fetchPostFailure(res.error))
+      error => dispatch(fetchPostFailure(error.message))
     );
   };
 }
@@ -152,16 +152,16 @@ export function resetFetchedPost() {
 export function addPost(post) {
   return dispatch => {
     dispatch(requestAddPost());
-    return api
-      .createPost(post)
-      .then(res => {
+    return api.createPost(post).then(
+      res => {
         console.log("Normalized:");
         console.dir(normalize(res.data, schema.post));
         dispatch(addPostSuccess(normalize(res.data, schema.post)));
-      })
-      .catch(res => {
-        dispatch(addPostFailure(res.error));
-      });
+      },
+      error => {
+        dispatch(addPostFailure(error.message));
+      }
+    );
   };
 }
 
@@ -197,11 +197,9 @@ export function updatePost(id, post) {
     dispatch(requestUpdatePost());
     return api.updatePostById(id, post).then(
       res => {
-        console.log("Normalized:");
-        console.dir(normalize(res.data, schema.post));
-        dispatch(updatePostSuccess(res.data));
+        dispatch(updatePostSuccess(normalize(res.data, schema.post)));
       },
-      res => dispatch(updatePostFailure(res.error))
+      error => dispatch(updatePostFailure(error.message))
     );
   };
 }
@@ -211,15 +209,18 @@ function requestUpdatePost() {
     type: REQUEST_UPDATE_POST
   };
 }
-export function votePost(id, option) {
+export function votePost(post, option) {
   return dispatch => {
-    dispatch(requestVotePost());
-    return api.votePostById(id, option).then(
-      res => {
-        dispatch(updatePostSuccess(normalize(res.data, schema.post)));
-      },
-      res => dispatch(updatePostFailure(res.error))
-    );
+    const newPost = {
+      ...post,
+      voteScore: option === "upVote" ? post.voteScore + 1 : post.voteScore - 1
+    };
+
+    dispatch(updatePostSuccess(normalize(newPost, schema.post)));
+    return api.votePostById(post.id, option).catch(error => {
+      dispatch(updatePostFailure(error.message));
+      dispatch(updatePostSuccess(normalize(post, schema.post)));
+    });
   };
 }
 
@@ -251,11 +252,9 @@ export function deletePost(id) {
     dispatch(requestDeletePost());
     return api.deletePostById(id).then(
       res => {
-        console.log("Normalized:");
-        console.dir(normalize(res.data, schema.post));
-        dispatch(deletePostSuccess(res.data));
+        dispatch(deletePostSuccess(normalize(res.data, schema.post)));
       },
-      res => dispatch(deletePostFailure(res.error))
+      error => dispatch(deletePostFailure(error.message))
     );
   };
 }

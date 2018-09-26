@@ -34,8 +34,8 @@ export function fetchComments(postId) {
           fetchCommentsSuccess(normalize(res.data, schema.arrayOfComments))
         );
       },
-      res => {
-        dispatch(fetchCommentsFailure(res.error));
+      error => {
+        dispatch(fetchCommentsFailure(error.message));
       }
     );
   };
@@ -82,8 +82,8 @@ export function addComment(comment) {
       res => {
         dispatch(addCommentsSuccess(normalize(res.data, schema.comment)));
       },
-      res => {
-        dispatch(addCommentsFailure(res.error));
+      error => {
+        dispatch(addCommentsFailure(error.message));
       }
     );
   };
@@ -119,8 +119,8 @@ export function updateComment(id, comment) {
         console.dir(normalize(res.data, schema.comment));
         dispatch(updateCommentSuccess(normalize(res.data, schema.comment)));
       },
-      res => {
-        dispatch(updateCommentFailure(res.error));
+      error => {
+        dispatch(updateCommentFailure(error.message));
       }
     );
   };
@@ -133,16 +133,18 @@ function requestUpdateComment() {
 }
 
 //Vote comment
-export function voteComment(id, option) {
+export function voteComment(comment, option) {
   return dispatch => {
-    api.voteCommentById(id, option).then(
-      res => {
-        dispatch(updateCommentSuccess(normalize(res.data, schema.comment)));
-      },
-      res => {
-        dispatch(updateCommentFailure(res.error));
-      }
-    );
+    const newComment = {
+      ...comment,
+      voteScore:
+        option === "upVote" ? comment.voteScore + 1 : comment.voteScore - 1
+    };
+    dispatch(updateCommentSuccess(normalize(newComment, schema.comment)));
+    api.voteCommentById(comment.id, option).catch(error => {
+      dispatch(updateCommentFailure(error.message));
+      dispatch(updateCommentSuccess(normalize(comment, schema.comment)));
+    });
   };
 }
 
@@ -170,8 +172,8 @@ export function deleteComment(id) {
         console.dir(normalize(res.data, schema.comment));
         dispatch(deleteCommentsSuccess(normalize(res.data, schema.comment)));
       },
-      res => {
-        dispatch(deleteCommentsFailure(res.error));
+      error => {
+        dispatch(deleteCommentsFailure(error.message));
       }
     );
   };

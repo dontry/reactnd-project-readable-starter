@@ -77,7 +77,7 @@ class PostDetail extends Component {
   };
 
   handleVote = option => () => {
-    this.props.votePost && this.props.votePost(this.props.postId, option);
+    this.props.votePost && this.props.votePost(this.props.post, option);
   };
 
   handleDeleteDialog = () => {
@@ -93,7 +93,13 @@ class PostDetail extends Component {
   };
 
   render() {
-    const { post, handleCommentList, commentListOpen, error, loading } = this.props;
+    const {
+      post,
+      handleCommentList,
+      commentListOpen,
+      error,
+      loading
+    } = this.props;
     const { open } = this.state;
 
     if (error) {
