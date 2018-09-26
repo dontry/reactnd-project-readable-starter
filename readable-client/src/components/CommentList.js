@@ -52,16 +52,16 @@ class CommentList extends Component {
   };
 
   render() {
-    const { comments } = this.props;
-    if (comments.error) {
+    const { comments, error, loading } = this.props;
+    if (error) {
       return <div />;
-    } else if (comments.loading) {
+    } else if (loading) {
       return (
         <Loading delay={200} type="spin" color="#222" className="loading" />
       );
     }
     const { selectedSortMethod } = this.state;
-    const children = this.createCommentItems(comments.entity);
+    const children = this.createCommentItems(comments);
     return (
       <Card>
         <SortButtonGroup
@@ -76,6 +76,7 @@ class CommentList extends Component {
 }
 
 CommentList.propTypes = {
+  postId: PropTypes.number,
   comments: PropTypes.shape({
     commentsList: PropTypes.array,
     error: PropTypes.object,

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import PostItem from "./PostItem";
 import { List } from "material-ui/List";
 import SortButtonGroup from "./SortButtonGroup";
@@ -45,15 +46,15 @@ class PostsList extends Component {
   };
 
   render() {
-    const { posts } = this.props;
-    if (posts.error) {
+    const { posts, error, loading } = this.props;
+    if (error) {
       return <Redirect to="/error/404" />;
-    } else if (posts.loading) {
+    } else if (loading) {
       return <PageLoading />;
     }
 
     const { selectedSortMethod } = this.state;
-    const PostItems = this.createPostItems(posts.entity);
+    const PostItems = this.createPostItems(posts);
     return (
       <div>
         <SortButtonGroup
@@ -66,5 +67,11 @@ class PostsList extends Component {
     );
   }
 }
+
+PostsList.propTypes = {
+  posts: PropTypes.object.isRequired,
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.string
+};
 
 export default PostsList;

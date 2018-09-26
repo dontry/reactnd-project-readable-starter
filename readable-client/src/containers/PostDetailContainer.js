@@ -7,11 +7,13 @@ import {
   votePost
 } from "../actions/posts";
 import PostDetail from "../components/PostDetail";
+import { getPostById, getError, getIsLoading } from "../reducers/post";
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    post: state.posts.activePost,
-    postId: ownProps.postId
+    post: getPostById(state.posts, ownProps.postId),
+    error: getError(state.posts),
+    loading: getIsLoading(state.posts)
   };
 };
 
@@ -33,4 +35,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostDetail);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PostDetail);

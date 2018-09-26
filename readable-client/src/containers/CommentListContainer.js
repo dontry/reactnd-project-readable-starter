@@ -7,9 +7,17 @@ import {
   voteComment
 } from "../actions/comments";
 import CommentList from "../components/CommentList";
+import {
+  getCommentByParentId,
+  getIsLoading,
+  getError
+} from "../reducers/comment";
+
 const mapStateToProps = (state, ownProps) => {
   return {
-    comments: state.comments.commentsList
+    comments: getCommentByParentId(state.comments, ownProps.postId),
+    loading: getIsLoading(state.comments),
+    error: getError(state.comments)
   };
 };
 
@@ -33,4 +41,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CommentList);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CommentList);

@@ -1,13 +1,11 @@
 import { connect } from "react-redux";
-import {
-  fetchCategories
-} from "../actions/categories";
+import { fetchCategories } from "../actions/categories";
 import CategoryMenu from "../components/CategoryMenu";
 
 const mapStateToProps = state => {
   return {
-    categories: state.categories.categoriesList
-  }
+    categories: state.categories.list
+  };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -18,4 +16,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CategoryMenu);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CategoryMenu);

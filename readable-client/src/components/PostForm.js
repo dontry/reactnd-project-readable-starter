@@ -6,9 +6,10 @@ import CategoryDropdownMenu from "./CategoryDropdownMenu";
 import RaisedButton from "material-ui/RaisedButton";
 import FlatButton from "material-ui/FlatButton";
 import { withRouter, Redirect } from "react-router-dom";
-import uniqid from "uniqid";
+import uuid from "uuid";
 import { isRequired } from "../utils/validations";
 import PageLoading from "./PageLoading";
+import _ from "lodash";
 
 const styles = {
   card: {
@@ -31,7 +32,7 @@ const styles = {
 const requiredField = isRequired("This field is required");
 
 const InitNewPost = () => ({
-  id: uniqid(),
+  id: uuid(),
   timestamp: null,
   title: "",
   body: "",
@@ -64,36 +65,36 @@ class PostForm extends Component {
     router: () => true //context
   };
   state = {
-    postEntity: this.props.post.entity || InitNewPost()
+    post: this.props.post || InitNewPost()
   };
   componentWillMount() {
     this.props.reset && this.props.reset();
   }
   componentDidMount() {
-    if (this.isCategoryEmpty()) {
+    if (_.isEmpty(this.props.categories)) {
       this.props.fetchCategories();
     }
   }
   handleChangeField = fieldName => event => {
     this.setState({
-      postEntity: { ...this.state.postEntity, [fieldName]: event.target.value }
+      post: { ...this.state.post, [fieldName]: event.target.value }
     });
   };
   handleChangeCategory = (event, index, value) => {
     this.setState({
-      postEntity: { ...this.state.postEntity, category: value }
+      post: { ...this.state.post, category: value }
     });
   };
   handleSubmit = () => {
     if (this.props.addPost) {
-      const newPostEntity = { ...this.state.postEntity, timestamp: Date.now() };
-      this.props.addPost(newPostEntity);
+      const newPost = { ...this.state.post, timestamp: Date.now() };
+      this.props.addPost(newPost);
     } else if (this.props.updatePost) {
-      const updatedPostEntity = {
-        ...this.state.postEntity,
+      const updatedPost = {
+        ...this.state.post,
         timestamp: Date.now()
       };
-      this.props.updatePost(updatedPostEntity.id, updatedPostEntity);
+      this.props.updatePost(updatedPost.id, updatedPost);
     }
     this.context.router.history.goBack();
   };
@@ -101,34 +102,31 @@ class PostForm extends Component {
     //TODO
     this.context.router.history.goBack();
   };
-  isCategoryEmpty = (entity = []) => {
-    return !entity || entity.length === 0;
-  };
   render() {
-    const { post, categories } = this.props;
-    const categoryNames = this.isCategoryEmpty(categories.entity)
+    const { categories, loading, error } = this.props;
+    const categoryNames = _.isEmpty(categories)
       ? []
-      : categories.entity.map(category => category.name);
+      : categories.map(category => category.name);
 
-    if (post.error) {
+    if (error) {
       return <Redirect to="/error/404" />;
-    } else if (post.loading) {
+    } else if (loading) {
       return <PageLoading />;
     }
 
-    const { postEntity } = this.state;
+    const { post } = this.state;
     return (
       <Card style={styles.card}>
         <TextField
           name="title"
           floatingLabelText="Title"
           style={styles.titleField}
-          value={postEntity.title}
+          value={post.title}
           onChange={this.handleChangeField("title")}
-          errorText={requiredField(postEntity)}
+          errorText={requiredField(post)}
         />
         <CategoryDropdownMenu
-          selected={postEntity.category}
+          selected={post.category}
           categories={categoryNames}
           handleChange={this.handleChangeCategory}
         />
@@ -136,19 +134,19 @@ class PostForm extends Component {
         <TextField
           name="author"
           floatingLabelText="Author"
-          value={postEntity.author}
+          value={post.author}
           onChange={this.handleChangeField("author").bind(this)}
-          errorText={requiredField(postEntity.author.trim())}
+          errorText={requiredField(post.author.trim())}
         />
         <TextField
           name="body"
           floatingLabelText="Body"
-          multiLine={!!postEntity.title}
+          multiLine={!!post.title}
           fullWidth={true}
           rows={3}
-          value={postEntity.body}
+          value={post.body}
           onChange={this.handleChangeField("body").bind(this)}
-          errorText={requiredField(postEntity.body.trim())}
+          errorText={requiredField(post.body.trim())}
         />
         <ButtonGroup
           handleSubmit={this.handleSubmit.bind(this)}
@@ -160,16 +158,10 @@ class PostForm extends Component {
 }
 
 PostForm.propTypes = {
-  post: PropTypes.shape({
-    entity: PropTypes.object,
-    error: PropTypes.string,
-    loading: PropTypes.bool
-  }).isRequired,
-  categories: PropTypes.shape({
-    entity: PropTypes.array,
-    error: PropTypes.string,
-    loading: PropTypes.bool
-  }).isRequired
+  post: PropTypes.object.isRequired,
+  categories: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.string
 };
 
 export default withRouter(PostForm);

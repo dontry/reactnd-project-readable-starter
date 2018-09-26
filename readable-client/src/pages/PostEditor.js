@@ -8,7 +8,7 @@ const PostEditor = props => {
   return (
     <div>
       <NavHeader title="Editor" />
-      {id ? <PostEditContainer /> : <PostCreateContainer />}
+      {id ? <PostEditContainer id={id} /> : <PostCreateContainer />}
     </div>
   );
 };

@@ -5,17 +5,13 @@ import {
   resetFetchedPosts
 } from "../actions/posts";
 import PostsList from "../components/PostsList";
+import { getPostsByCategory, getIsLoading, getError } from "../reducers/post";
 
 const mapStateToProps = (state, ownProps) => {
-  const category = ownProps.category;
-  const allPostsEntity = state.posts.postsList.entity;
   return {
-    posts: category
-      ? {
-          ...state.posts.postsList,
-          entity: allPostsEntity.filter(post => post.category === category)
-        }
-      : state.posts.postsList
+    posts: getPostsByCategory(state.posts, ownProps.category),
+    loading: getIsLoading(state.posts),
+    error: getError(state.posts)
   };
 };
 
@@ -33,4 +29,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostsList);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PostsList);

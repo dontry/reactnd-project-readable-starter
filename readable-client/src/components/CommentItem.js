@@ -14,7 +14,7 @@ const styles = {
 
 const CommentItem = props => {
   const handleVote = option => () => {
-    props.handleCommentVote(props.comment.id, option);
+    props.handleCommentVote(props.comment, option);
   };
 
   const handleEdit = commentId => () => {

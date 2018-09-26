@@ -3,15 +3,17 @@ import {
   updateComment,
   addComment,
   closeCommentDialog,
-  resetFetchComment
+  resetComment
 } from "../actions/comments";
 import CommentDialog from "../components/CommentDialog";
+import { getCommentById, getIsLoading, getError } from "../reducers/comment";
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = state => {
   return {
-    comment: state.comments.activeComment,
-    open: state.comments.dialog.open,
-    postId: ownProps.postId
+    comment: getCommentById(state.comments, state.comments.list.activeId),
+    loading: getIsLoading(state.comments),
+    error: getError(state.comments),
+    open: state.comments.dialog.open
   };
 };
 
@@ -27,9 +29,12 @@ const mapDispatchToProps = dispatch => {
       dispatch(closeCommentDialog());
     },
     reset: () => {
-      dispatch(resetFetchComment());
+      dispatch(resetComment());
     }
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CommentDialog);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CommentDialog);
